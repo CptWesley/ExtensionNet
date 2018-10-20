@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2000
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExtensionNet.Copy", "ExtensionNet.Copy\ExtensionNet.Copy.csproj", "{E11FD51D-4FB6-48D7-9AB2-73DDCA61F389}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExtensionNet", "ExtensionNet\ExtensionNet.csproj", "{E11FD51D-4FB6-48D7-9AB2-73DDCA61F389}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExtensionNet.Copy.Tests", "ExtensionNet.Copy.Tests\ExtensionNet.Copy.Tests.csproj", "{764543CD-C418-4B8E-A697-96EE4BD5BEBE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExtensionNet.Tests", "ExtensionNet.Tests\ExtensionNet.Tests.csproj", "{764543CD-C418-4B8E-A697-96EE4BD5BEBE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

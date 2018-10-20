@@ -42,7 +42,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\ExtensionNet.Copy\ExtensionNet.Copy.csproj" />
+    <ProjectReference Include="..\ExtensionNet\ExtensionNet.csproj" />
   </ItemGroup>
 
 </Project>

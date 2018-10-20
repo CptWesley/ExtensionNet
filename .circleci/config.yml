@@ -14,8 +14,8 @@ jobs:
           name: Tests
           command: |
                    cd src
-                   dotnet test ExtensionNet.Copy.Tests /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=bin/
+                   dotnet test ExtensionNet.Tests /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=bin/
       - run:
           name: Codecov
           command: |
-                   bash <(curl -s https://codecov.io/bash) -f "src/ExtensionNet.Copy.Tests/bin/coverage.opencover.xml" -t $CODECOV_KEY
+                   bash <(curl -s https://codecov.io/bash) -f "src/ExtensionNet.Tests/bin/coverage.opencover.xml" -t $CODECOV_KEY
