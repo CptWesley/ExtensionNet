@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Text;
+using ExtensionNet.Copy;
 using Xunit;
 
 using static AssertNet.Xunit.Assertions;
 
-namespace ExtensionNet.Copy.Tests
+namespace ExtensionNet.Tests.Copy
 {
     /// <summary>
     /// Test class for the <see cref="CopyExtension"/> class.
