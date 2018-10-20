@@ -26,19 +26,12 @@ namespace ExtensionNet.Copy
         /// <returns>A copy of the object.</returns>
         public static T Copy<T>(this T that, bool deep)
         {
-            if (that == null)
+            if (that == null || that is string || that.GetType().IsValueType)
             {
                 return that;
             }
 
-            Type type = that.GetType();
-
-            if (that is string || type.IsValueType)
-            {
-                return that;
-            }
-
-            if (type.IsArray)
+            if (that.GetType().IsArray)
             {
                 return (T)CopyArray(that as Array, deep);
             }
@@ -60,14 +53,8 @@ namespace ExtensionNet.Copy
 
             foreach (FieldInfo field in fields)
             {
-                if (deep)
-                {
-                    field.SetValue(copy, field.GetValue(that).Copy(true));
-                }
-                else
-                {
-                    field.SetValue(copy, field.GetValue(that));
-                }
+                object value = deep ? field.GetValue(that).Copy(true) : field.GetValue(that);
+                field.SetValue(copy, value);
             }
 
             return copy;
@@ -85,14 +72,8 @@ namespace ExtensionNet.Copy
 
             for (int i = 0; i < that.Length; ++i)
             {
-                if (deep)
-                {
-                    copy.SetValue(that.GetValue(i).Copy(true), i);
-                }
-                else
-                {
-                    copy.SetValue(that.GetValue(i), i);
-                }
+                object value = deep ? that.GetValue(i).Copy(true) : that.GetValue(i);
+                copy.SetValue(value, i);
             }
 
             return copy;
