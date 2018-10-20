@@ -1,0 +1,21 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: microsoft/dotnet:2.0-sdk
+    steps:
+      - checkout
+      - run:
+          name: Dependencies
+          command: |
+                   cd src
+                   dotnet restore
+      - run:
+          name: Tests
+          command: |
+                   cd src
+                   dotnet test ExtensionNet.Copy.Tests /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutputDirectory=bin
+      - run:
+          name: Codecov
+          command: |
+                   bash <(curl -s https://codecov.io/bash) -f "src/ExtensionNet.Copy.Tests/bin/coverage.opencover.xml" -t $CODECOV_KEY
