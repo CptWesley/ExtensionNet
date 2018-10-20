@@ -1,4 +1,6 @@
-﻿using System.Runtime.Serialization;
+﻿using System;
+using System.Reflection;
+using System.Runtime.Serialization;
 
 namespace ExtensionNet.Copy
 {
@@ -24,12 +26,75 @@ namespace ExtensionNet.Copy
         /// <returns>A copy of the object.</returns>
         public static T Copy<T>(this T that, bool deep)
         {
-            if (that is string)
+            if (that == null)
             {
                 return that;
             }
 
-            T copy = (T)FormatterServices.GetUninitializedObject(typeof(T));
+            Type type = that.GetType();
+
+            if (that is string || type.IsValueType)
+            {
+                return that;
+            }
+
+            if (type.IsArray)
+            {
+                return (T)CopyArray(that as Array, deep);
+            }
+
+            return (T)CopyObject(that, deep);
+        }
+
+        /// <summary>
+        /// Creates a copy of an object which is not an array or a value type.
+        /// </summary>
+        /// <param name="that">The object to copy.</param>
+        /// <param name="deep">Specifies whether or not the copy should be a deep copy.</param>
+        /// <returns>A copy of the object.</returns>
+        private static object CopyObject(object that, bool deep)
+        {
+            Type type = that.GetType();
+            object copy = FormatterServices.GetUninitializedObject(type);
+            FieldInfo[] fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+
+            foreach (FieldInfo field in fields)
+            {
+                if (deep)
+                {
+                    field.SetValue(copy, field.GetValue(that).Copy(true));
+                }
+                else
+                {
+                    field.SetValue(copy, field.GetValue(that));
+                }
+            }
+
+            return copy;
+        }
+
+        /// <summary>
+        /// Creates a copy of an array.
+        /// </summary>
+        /// <param name="that">The array to copy.</param>
+        /// <param name="deep">Specifies whether or not the copy should be a deep copy.</param>
+        /// <returns>A copy of the object.</returns>
+        private static object CopyArray(Array that, bool deep)
+        {
+            Array copy = Array.CreateInstance(that.GetType().GetElementType(), that.Length);
+
+            for (int i = 0; i < that.Length; ++i)
+            {
+                if (deep)
+                {
+                    copy.SetValue(that.GetValue(i).Copy(true), i);
+                }
+                else
+                {
+                    copy.SetValue(that.GetValue(i), i);
+                }
+            }
+
             return copy;
         }
     }
