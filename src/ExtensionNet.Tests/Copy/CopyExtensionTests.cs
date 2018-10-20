@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Text;
-using ExtensionNet.Copy;
 using Xunit;
 
 using static AssertNet.Xunit.Assertions;
