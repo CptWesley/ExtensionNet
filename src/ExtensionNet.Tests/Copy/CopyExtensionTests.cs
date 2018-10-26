@@ -64,5 +64,33 @@ namespace ExtensionNet.Tests.Copy
             Random rnd2 = rnd1.Copy(true);
             AssertThat(rnd1.Next()).IsEqualTo(rnd2.Next());
         }
+
+        /// <summary>
+        /// Checks that circular references get handled correctly.
+        /// </summary>
+        [Fact]
+        public static void CircularReferenceTest()
+        {
+            CircularClass a = new CircularClass();
+            CircularClass b = new CircularClass();
+            a.Reference = b;
+            b.Reference = a;
+            CircularClass ac = a.Copy(true);
+            AssertThat(ac.Reference.Reference).IsSameAs(ac);
+        }
+
+        /// <summary>
+        /// Class containing circular reference for testing purposes.
+        /// </summary>
+        protected class CircularClass
+        {
+            /// <summary>
+            /// Gets or sets the reference.
+            /// </summary>
+            /// <value>
+            /// The reference.
+            /// </value>
+            public CircularClass Reference { get; set; }
+        }
     }
 }
