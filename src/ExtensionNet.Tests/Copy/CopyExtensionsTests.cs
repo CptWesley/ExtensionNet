@@ -8,9 +8,9 @@ using static AssertNet.Xunit.Assertions;
 namespace ExtensionNet.Tests.Copy
 {
     /// <summary>
-    /// Test class for the <see cref="CopyExtension"/> class.
+    /// Test class for the <see cref="CopyExtensions"/> class.
     /// </summary>
-    public static class CopyExtensionTests
+    public static class CopyExtensionsTests
     {
         /// <summary>
         /// Checks that we can create a copy of a string.
