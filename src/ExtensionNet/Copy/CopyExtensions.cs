@@ -8,7 +8,7 @@ namespace ExtensionNet.Copy
     /// <summary>
     /// Static extension class which adds a copy method to every object.
     /// </summary>
-    public static class CopyExtension
+    public static class CopyExtensions
     {
         /// <summary>
         /// Creates a shallow copy of the object.
