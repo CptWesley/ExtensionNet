@@ -102,16 +102,7 @@ namespace ExtensionNet.Streams
         /// <param name="stream">The stream to read from.</param>
         /// <returns>First unsigned short on the stream.</returns>
         public static ushort ReadUInt16(this Stream stream)
-        {
-            byte[] bytes = stream.ReadUInt8(2);
-
-            if (BitConverter.IsLittleEndian)
-            {
-                Array.Reverse(bytes);
-            }
-
-            return BitConverter.ToUInt16(bytes, 0);
-        }
+            => BitConverter.ToUInt16(stream.ReadUInt8(2).ReverseIfLittleEndian(), 0);
 
         /// <summary>
         /// Reads multiple unsigned shorts from stream.
@@ -136,16 +127,7 @@ namespace ExtensionNet.Streams
         /// <param name="stream">The stream to read from.</param>
         /// <returns>First signed short on the stream.</returns>
         public static short ReadInt16(this Stream stream)
-        {
-            byte[] bytes = stream.ReadUInt8(2);
-
-            if (BitConverter.IsLittleEndian)
-            {
-                Array.Reverse(bytes);
-            }
-
-            return BitConverter.ToInt16(bytes, 0);
-        }
+            => BitConverter.ToInt16(stream.ReadUInt8(2).ReverseIfLittleEndian(), 0);
 
         /// <summary>
         /// Reads multiple signed shorts from stream.
@@ -170,15 +152,7 @@ namespace ExtensionNet.Streams
         /// <param name="stream">The stream to read from.</param>
         /// <returns>First unsigned short on the stream.</returns>
         public static uint ReadUInt32(this Stream stream)
-        {
-            byte[] bytes = stream.ReadUInt8(4);
-            if (BitConverter.IsLittleEndian)
-            {
-                Array.Reverse(bytes);
-            }
-
-            return BitConverter.ToUInt32(bytes, 0);
-        }
+            => BitConverter.ToUInt32(stream.ReadUInt8(4).ReverseIfLittleEndian(), 0);
 
         /// <summary>
         /// Reads multiple unsigned integers from stream.
@@ -203,16 +177,7 @@ namespace ExtensionNet.Streams
         /// <param name="stream">The stream to read from.</param>
         /// <returns>First signed short on the stream.</returns>
         public static int ReadInt32(this Stream stream)
-        {
-            byte[] bytes = stream.ReadUInt8(4);
-
-            if (BitConverter.IsLittleEndian)
-            {
-                Array.Reverse(bytes);
-            }
-
-            return BitConverter.ToInt32(bytes, 0);
-        }
+            => BitConverter.ToInt32(stream.ReadUInt8(4).ReverseIfLittleEndian(), 0);
 
         /// <summary>
         /// Reads multiple signed integers from stream.
@@ -237,16 +202,7 @@ namespace ExtensionNet.Streams
         /// <param name="stream">The stream to read from.</param>
         /// <returns>First unsigned short on the stream.</returns>
         public static ulong ReadUInt64(this Stream stream)
-        {
-            byte[] bytes = stream.ReadUInt8(8);
-
-            if (BitConverter.IsLittleEndian)
-            {
-                Array.Reverse(bytes);
-            }
-
-            return BitConverter.ToUInt64(bytes, 0);
-        }
+            => BitConverter.ToUInt64(stream.ReadUInt8(8).ReverseIfLittleEndian(), 0);
 
         /// <summary>
         /// Reads multiple unsigned longs from stream.
@@ -271,16 +227,7 @@ namespace ExtensionNet.Streams
         /// <param name="stream">The stream to read from.</param>
         /// <returns>First signed short on the stream.</returns>
         public static long ReadInt64(this Stream stream)
-        {
-            byte[] bytes = stream.ReadUInt8(8);
-
-            if (BitConverter.IsLittleEndian)
-            {
-                Array.Reverse(bytes);
-            }
-
-            return BitConverter.ToInt64(bytes, 0);
-        }
+            => BitConverter.ToInt64(stream.ReadUInt8(8).ReverseIfLittleEndian(), 0);
 
         /// <summary>
         /// Reads multiple signed longs from stream.
@@ -350,13 +297,7 @@ namespace ExtensionNet.Streams
         {
             foreach (ushort value in values)
             {
-                byte[] bytes = BitConverter.GetBytes(value);
-                if (BitConverter.IsLittleEndian)
-                {
-                    Array.Reverse(bytes);
-                }
-
-                stream.Write(bytes);
+                stream.Write(BitConverter.GetBytes(value).ReverseIfLittleEndian());
             }
         }
 
@@ -369,13 +310,7 @@ namespace ExtensionNet.Streams
         {
             foreach (short value in values)
             {
-                byte[] bytes = BitConverter.GetBytes(value);
-                if (BitConverter.IsLittleEndian)
-                {
-                    Array.Reverse(bytes);
-                }
-
-                stream.Write(bytes);
+                stream.Write(BitConverter.GetBytes(value).ReverseIfLittleEndian());
             }
         }
 
@@ -388,13 +323,7 @@ namespace ExtensionNet.Streams
         {
             foreach (uint value in values)
             {
-                byte[] bytes = BitConverter.GetBytes(value);
-                if (BitConverter.IsLittleEndian)
-                {
-                    Array.Reverse(bytes);
-                }
-
-                stream.Write(bytes);
+                stream.Write(BitConverter.GetBytes(value).ReverseIfLittleEndian());
             }
         }
 
@@ -407,13 +336,7 @@ namespace ExtensionNet.Streams
         {
             foreach (int value in values)
             {
-                byte[] bytes = BitConverter.GetBytes(value);
-                if (BitConverter.IsLittleEndian)
-                {
-                    Array.Reverse(bytes);
-                }
-
-                stream.Write(bytes);
+                stream.Write(BitConverter.GetBytes(value).ReverseIfLittleEndian());
             }
         }
 
@@ -426,13 +349,7 @@ namespace ExtensionNet.Streams
         {
             foreach (ulong value in values)
             {
-                byte[] bytes = BitConverter.GetBytes(value);
-                if (BitConverter.IsLittleEndian)
-                {
-                    Array.Reverse(bytes);
-                }
-
-                stream.Write(bytes);
+                stream.Write(BitConverter.GetBytes(value).ReverseIfLittleEndian());
             }
         }
 
@@ -445,14 +362,18 @@ namespace ExtensionNet.Streams
         {
             foreach (long value in values)
             {
-                byte[] bytes = BitConverter.GetBytes(value);
-                if (BitConverter.IsLittleEndian)
-                {
-                    Array.Reverse(bytes);
-                }
-
-                stream.Write(bytes);
+                stream.Write(BitConverter.GetBytes(value).ReverseIfLittleEndian());
             }
+        }
+
+        private static byte[] ReverseIfLittleEndian(this byte[] bytes)
+        {
+            if (BitConverter.IsLittleEndian)
+            {
+                Array.Reverse(bytes);
+            }
+
+            return bytes;
         }
     }
 }
