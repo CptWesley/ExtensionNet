@@ -7,11 +7,11 @@
     <PackageProjectUrl>https://github.com/CptWesley/ExtensionNet</PackageProjectUrl>
     <RepositoryUrl>https://github.com/CptWesley/ExtensionNet</RepositoryUrl>
     <PackageLicenseUrl>https://github.com/CptWesley/ExtensionNet/blob/master/LICENSE</PackageLicenseUrl>
-    <Description>Adds a method to objects allowing both deep and shallow copies.</Description>
-    <PackageTags>object extension deep shallow copy</PackageTags>
-    <AssemblyVersion>0.0.1.0</AssemblyVersion>
-    <FileVersion>0.0.1.0</FileVersion>
-    <Version>0.0.1.0</Version>
+    <Description>Adds general use extension methods to C# classes.</Description>
+    <PackageTags>object extension deep shallow copy streams</PackageTags>
+    <AssemblyVersion>0.1.1.0</AssemblyVersion>
+    <FileVersion>0.1.1.0</FileVersion>
+    <Version>0.1.1.0</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
