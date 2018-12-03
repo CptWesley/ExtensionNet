@@ -150,6 +150,20 @@ namespace ExtensionNet.Tests.Streams
         }
 
         /// <summary>
+        /// Checks that endianness matters.
+        /// </summary>
+        [Fact]
+        public void EndiannessTest()
+        {
+            long value = 43562456343564356;
+            stream.Write(value, true);
+            stream.Position = 0;
+            AssertThat(stream.ReadInt64(false)).IsNotEqualTo(value);
+            stream.Position = 0;
+            AssertThat(stream.ReadInt64(true)).IsEqualTo(value);
+        }
+
+        /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
         public void Dispose()
