@@ -110,8 +110,9 @@ namespace ExtensionNet.Tests.Copy
             };
 
             SomeStruct b = a.Copy(false);
+            AssertThat(b).IsSameAs(a);
             AssertThat(b.Value).IsEqualTo(a.Value);
-            AssertThat(b.Random).IsSameAs(b.Random);
+            AssertThat(b.Random).IsSameAs(a.Random);
         }
 
         /// <summary>
@@ -128,9 +129,10 @@ namespace ExtensionNet.Tests.Copy
             };
 
             SomeStruct b = a.Copy(true);
+            AssertThat(b).IsNotSameAs(a);
             AssertThat(b.Value).IsEqualTo(a.Value);
-            AssertThat(b.Random).IsNotSameAs(b.Random);
-            AssertThat(a.Random.Next()).IsEqualTo(b.Random.Next());
+            AssertThat(b.Random).IsNotSameAs(a.Random);
+            AssertThat(b.Random.Next()).IsEqualTo(a.Random.Next());
         }
 
         /// <summary>

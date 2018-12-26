@@ -38,7 +38,7 @@ namespace ExtensionNet.Copy
         /// <returns>A copy of the object.</returns>
         private static T Copy<T>(this T that, bool deep, Dictionary<object, object> copies)
         {
-            if (that == null || that is string || that.GetType().IsValueType)
+            if (that == null || that is string || that.GetType().IsPrimitive)
             {
                 return that;
             }
