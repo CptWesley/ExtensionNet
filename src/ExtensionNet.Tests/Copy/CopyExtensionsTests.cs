@@ -97,6 +97,43 @@ namespace ExtensionNet.Tests.Copy
         }
 
         /// <summary>
+        /// Checks that we can do a shallow copy of structs correctly.
+        /// </summary>
+        [Fact]
+        public static void ShallowStructTest()
+        {
+            Random rnd = new Random();
+            SomeStruct a = new SomeStruct()
+            {
+                Value = 42,
+                Random = rnd
+            };
+
+            SomeStruct b = a.Copy(false);
+            AssertThat(b.Value).IsEqualTo(a.Value);
+            AssertThat(b.Random).IsSameAs(b.Random);
+        }
+
+        /// <summary>
+        /// Checks that we can do a deep copy of structs correctly.
+        /// </summary>
+        [Fact]
+        public static void DeepStructTest()
+        {
+            Random rnd = new Random();
+            SomeStruct a = new SomeStruct()
+            {
+                Value = 42,
+                Random = rnd
+            };
+
+            SomeStruct b = a.Copy(true);
+            AssertThat(b.Value).IsEqualTo(a.Value);
+            AssertThat(b.Random).IsNotSameAs(b.Random);
+            AssertThat(a.Random.Next()).IsEqualTo(b.Random.Next());
+        }
+
+        /// <summary>
         /// Class containing circular reference for testing purposes.
         /// </summary>
         protected class CircularClass
@@ -152,6 +189,24 @@ namespace ExtensionNet.Tests.Copy
             /// Gets or sets the son value.
             /// </summary>
             public int SonValue { get; set; }
+        }
+
+        /// <summary>
+        /// Some struct.
+        /// </summary>
+        [SuppressMessage("Performance", "CA1815", Justification = "Not needed for testing.")]
+        [SuppressMessage("OrderingRules", "SA1201", Justification = "Not needed for testing.")]
+        protected struct SomeStruct
+        {
+            /// <summary>
+            /// Gets or sets the value.
+            /// </summary>
+            public int Value { get; set; }
+
+            /// <summary>
+            /// Gets or sets the random.
+            /// </summary>
+            public Random Random { get; set; }
         }
     }
 }
