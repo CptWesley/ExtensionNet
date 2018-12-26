@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
-using ExtensionNet.Copy;
+using ExtensionNet.Reflective;
 using Xunit;
 
 using static AssertNet.Xunit.Assertions;
 
-namespace ExtensionNet.Tests.Copy
+namespace ExtensionNet.Tests.Reflective
 {
     /// <summary>
     /// Test class for the <see cref="CopyExtensions"/> class.

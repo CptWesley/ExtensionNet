@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.Serialization;
 
-namespace ExtensionNet.Copy
+namespace ExtensionNet.Reflective
 {
     /// <summary>
     /// Static extension class which adds a copy method to every object.
