@@ -68,15 +68,34 @@ namespace ExtensionNet.Copy
             Type type = that.GetType();
             object copy = FormatterServices.GetUninitializedObject(type);
             copies.Add(that, copy);
-            FieldInfo[] fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
-            foreach (FieldInfo field in fields)
+            Type curType = type;
+            while (curType != null)
             {
-                object value = deep ? field.GetValue(that).Copy(true, copies) : field.GetValue(that);
-                field.SetValue(copy, value);
+                SetTypeFields(that, copy, curType, deep, copies);
+                curType = curType.BaseType;
             }
 
             return copy;
+        }
+
+        /// <summary>
+        /// Sets the fields on the copy of a specific type.
+        /// </summary>
+        /// <param name="source">The source object.</param>
+        /// <param name="copy">The copy.</param>
+        /// <param name="type">The type.</param>
+        /// <param name="deep">Specifies whether or not the copy should be a deep copy.</param>
+        /// <param name="copies">Map containing a link between objects and their copies.</param>
+        private static void SetTypeFields(object source, object copy, Type type, bool deep, Dictionary<object, object> copies)
+        {
+            FieldInfo[] fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+
+            foreach (FieldInfo field in fields)
+            {
+                object value = deep ? field.GetValue(source).Copy(true, copies) : field.GetValue(source);
+                field.SetValue(copy, value);
+            }
         }
 
         /// <summary>
