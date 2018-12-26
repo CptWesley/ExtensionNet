@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using ExtensionNet.Copy;
 using Xunit;
@@ -80,6 +81,22 @@ namespace ExtensionNet.Tests.Copy
         }
 
         /// <summary>
+        /// Checks that inheritance works correctly.
+        /// </summary>
+        [Fact]
+        public static void InheritanceTest()
+        {
+            SonClass son = new SonClass();
+            son.PublicValue = 42;
+            son.SetPrivateValue(1337);
+            son.SonValue = 50;
+            SonClass copy = son.Copy(true);
+            AssertThat(copy.SonValue).IsEqualTo(50);
+            AssertThat(copy.PublicValue).IsEqualTo(42);
+            AssertThat(copy.GetPrivateValue()).IsEqualTo(1337);
+        }
+
+        /// <summary>
         /// Class containing circular reference for testing purposes.
         /// </summary>
         protected class CircularClass
@@ -91,6 +108,50 @@ namespace ExtensionNet.Tests.Copy
             /// The reference.
             /// </value>
             public CircularClass Reference { get; set; }
+        }
+
+        /// <summary>
+        /// Class allowing inheritance.
+        /// </summary>
+        protected class FatherClass
+        {
+            /// <summary>
+            /// Gets or sets the public value.
+            /// </summary>
+            [SuppressMessage("Design", "CA1051", Justification = "Needed for testing.")]
+            [SuppressMessage("MaintainabilityRules", "SA1401", Justification = "Needed for testing.")]
+            public int PublicValue;
+
+            /// <summary>
+            /// Gets or sets the private value.
+            /// </summary>
+            private int privateValue;
+
+            /// <summary>
+            /// Sets the private value.
+            /// </summary>
+            /// <param name="value">The value.</param>
+            public void SetPrivateValue(int value)
+                => privateValue = value;
+
+            /// <summary>
+            /// Gets the private value.
+            /// </summary>
+            /// <returns>The private value.</returns>
+            [SuppressMessage("Design", "CA1024", Justification = "Needed for testing.")]
+            public int GetPrivateValue()
+                => privateValue;
+        }
+
+        /// <summary>
+        /// Class inheriting from something else.
+        /// </summary>
+        protected class SonClass : FatherClass
+        {
+            /// <summary>
+            /// Gets or sets the son value.
+            /// </summary>
+            public int SonValue { get; set; }
         }
     }
 }
