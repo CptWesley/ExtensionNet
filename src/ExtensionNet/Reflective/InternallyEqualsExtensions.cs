@@ -26,9 +26,9 @@ namespace ExtensionNet.Reflective
         /// <param name="deep">Determines whether or not the comparison is recursive.</param>
         /// <returns>True if internally equal, false otherwise.</returns>
         public static bool InternallyEquals(this object that, object other, bool deep)
-            => that.InternallyEquals(other, deep, new Dictionary<object, HashSet<object>>());
+            => that.InternallyEquals(other, deep, new Dictionary<ReferenceWrapper, HashSet<ReferenceWrapper>>());
 
-        private static bool InternallyEquals(this object that, object other, bool deep, Dictionary<object, HashSet<object>> comparisons)
+        private static bool InternallyEquals(this object that, object other, bool deep, Dictionary<ReferenceWrapper, HashSet<ReferenceWrapper>> comparisons)
         {
             if (that == null)
             {
@@ -47,13 +47,16 @@ namespace ExtensionNet.Reflective
                 return false;
             }
 
+            ReferenceWrapper thatWrapper = new ReferenceWrapper(that);
+            ReferenceWrapper otherWrapper = new ReferenceWrapper(other);
+
             // Just assume that something is equal if we've started comparing it before. Might be a false assumption.
-            if (comparisons.TryGetValue(that, out var set) && set.Contains(other))
+            if (comparisons.TryGetValue(thatWrapper, out var set) && set.Contains(otherWrapper))
             {
                 return true;
             }
 
-            comparisons.AddComparison(that, other);
+            comparisons.AddComparison(thatWrapper, otherWrapper);
 
             if (type.IsArray)
             {
@@ -63,7 +66,7 @@ namespace ExtensionNet.Reflective
             return ObjectEquals(that, other, deep, comparisons);
         }
 
-        private static bool ArrayEquals(Array that, Array other, bool deep, Dictionary<object, HashSet<object>> comparisons)
+        private static bool ArrayEquals(Array that, Array other, bool deep, Dictionary<ReferenceWrapper, HashSet<ReferenceWrapper>> comparisons)
         {
             if (that.Length != other.Length)
             {
@@ -88,7 +91,7 @@ namespace ExtensionNet.Reflective
             return true;
         }
 
-        private static bool ObjectEquals(object that, object other, bool deep, Dictionary<object, HashSet<object>> comparisons)
+        private static bool ObjectEquals(object that, object other, bool deep, Dictionary<ReferenceWrapper, HashSet<ReferenceWrapper>> comparisons)
         {
             Type type = that.GetType();
             while (type != null)
@@ -104,7 +107,7 @@ namespace ExtensionNet.Reflective
             return true;
         }
 
-        private static bool EqualsForType(object that, object other, Type type, bool deep, Dictionary<object, HashSet<object>> comparisons)
+        private static bool EqualsForType(object that, object other, Type type, bool deep, Dictionary<ReferenceWrapper, HashSet<ReferenceWrapper>> comparisons)
         {
             FieldInfo[] fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly);
 
@@ -122,11 +125,11 @@ namespace ExtensionNet.Reflective
             return true;
         }
 
-        private static void AddComparison(this Dictionary<object, HashSet<object>> comparisons, object that, object other)
+        private static void AddComparison(this Dictionary<ReferenceWrapper, HashSet<ReferenceWrapper>> comparisons, ReferenceWrapper that, ReferenceWrapper other)
         {
             if (!comparisons.ContainsKey(that))
             {
-                comparisons[that] = new HashSet<object>();
+                comparisons[that] = new HashSet<ReferenceWrapper>();
             }
 
             comparisons[that].Add(other);

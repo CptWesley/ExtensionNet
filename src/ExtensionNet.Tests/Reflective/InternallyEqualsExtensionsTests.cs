@@ -170,5 +170,15 @@ namespace ExtensionNet.Tests.Reflective
             AssertThat(a.InternallyEquals(c, false)).IsFalse();
             AssertThat(a.InternallyEquals(c, true)).IsTrue();
         }
+
+        /// <summary>
+        /// Checks that we don't go into an infinite loop if we use this function to override equals.
+        /// </summary>
+        [Fact]
+        public static void EqualsOverrideTest()
+        {
+            DummyClasses.OverriddenClass a = new DummyClasses.OverriddenClass();
+            AssertThat(a).IsEqualTo(a);
+        }
     }
 }

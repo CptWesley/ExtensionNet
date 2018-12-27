@@ -24,9 +24,9 @@ namespace ExtensionNet.Reflective
         /// <param name="deep">Whether or not to get the hash code recursively.</param>
         /// <returns>The internal hash code retrieved using reflection.</returns>
         public static int GetInternalHashCode(this object that, bool deep)
-            => that.GetInternalHashCode(deep, new Dictionary<object, int>());
+            => that.GetInternalHashCode(deep, new Dictionary<ReferenceWrapper, int>());
 
-        private static int GetInternalHashCode(this object that, bool deep, Dictionary<object, int> hashes)
+        private static int GetInternalHashCode(this object that, bool deep, Dictionary<ReferenceWrapper, int> hashes)
         {
             if (that == null)
             {
@@ -39,7 +39,9 @@ namespace ExtensionNet.Reflective
                 return that.GetHashCode();
             }
 
-            if (hashes.TryGetValue(that, out int hash))
+            ReferenceWrapper thatWrapper = new ReferenceWrapper(that);
+
+            if (hashes.TryGetValue(thatWrapper, out int hash))
             {
                 return hash;
             }
@@ -54,11 +56,11 @@ namespace ExtensionNet.Reflective
                 result = GetObjectHash(that, deep, hashes);
             }
 
-            hashes.Add(that, result);
+            hashes.Add(thatWrapper, result);
             return result;
         }
 
-        private static int GetArrayHash(Array that, bool deep, Dictionary<object, int> hashes)
+        private static int GetArrayHash(Array that, bool deep, Dictionary<ReferenceWrapper, int> hashes)
         {
             int result = that.GetType().GetHashCode();
 
@@ -71,7 +73,7 @@ namespace ExtensionNet.Reflective
             return result;
         }
 
-        private static int GetObjectHash(object that, bool deep, Dictionary<object, int> hashes)
+        private static int GetObjectHash(object that, bool deep, Dictionary<ReferenceWrapper, int> hashes)
         {
             Type type = that.GetType();
             int result = type.GetHashCode();

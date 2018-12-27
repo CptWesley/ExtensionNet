@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using ExtensionNet.Reflective;
 
 namespace ExtensionNet.Tests.Reflective
 {
@@ -82,6 +83,36 @@ namespace ExtensionNet.Tests.Reflective
             /// Gets or sets the random.
             /// </summary>
             public Random Random { get; set; }
+        }
+
+        /// <summary>
+        /// Class which overrides equals and hashcode with internal stuff.
+        /// </summary>
+        internal class OverriddenClass
+        {
+            /// <summary>
+            /// Gets or sets the value.
+            /// </summary>
+            public int Value { get; set; }
+
+            /// <summary>
+            /// Determines whether the specified <see cref="object" />, is equal to this instance.
+            /// </summary>
+            /// <param name="obj">The <see cref="object" /> to compare with this instance.</param>
+            /// <returns>
+            ///   <c>true</c> if the specified <see cref="object" /> is equal to this instance; otherwise, <c>false</c>.
+            /// </returns>
+            public override bool Equals(object obj)
+                => this.InternallyEquals(obj);
+
+            /// <summary>
+            /// Returns a hash code for this instance.
+            /// </summary>
+            /// <returns>
+            /// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.
+            /// </returns>
+            public override int GetHashCode()
+                => this.GetInternalHashCode();
         }
     }
 }

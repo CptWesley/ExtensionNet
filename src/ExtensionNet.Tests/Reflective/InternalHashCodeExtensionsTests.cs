@@ -59,5 +59,15 @@ namespace ExtensionNet.Tests.Reflective
             c.Reference = a;
             AssertThat(a.GetInternalHashCode(false)).IsNotEqualTo(c.GetInternalHashCode(false));
         }
+
+        /// <summary>
+        /// Checks that we don't go into an infinite loop if we use this function to override hashcode functions.
+        /// </summary>
+        [Fact]
+        public static void GetHashCodeOverrideTest()
+        {
+            DummyClasses.OverriddenClass a = new DummyClasses.OverriddenClass();
+            AssertThat(a).HasSameHashCodeAs(a);
+        }
     }
 }
