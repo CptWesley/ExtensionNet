@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using ExtensionNet.Types;
 
 namespace ExtensionNet.Streams
 {
@@ -100,24 +101,24 @@ namespace ExtensionNet.Streams
         /// Reads an unsigned short from the stream.
         /// </summary>
         /// <param name="stream">The stream to read from.</param>
-        /// <param name="bigEndian">Determines whether to interpret the values as big endian or little endian.</param>
+        /// <param name="endianness">Determines whether to interpret the values as big endian or little endian.</param>
         /// <returns>First unsigned short on the stream.</returns>
-        public static ushort ReadUInt16(this Stream stream, bool bigEndian = false)
-            => BitConverter.ToUInt16(stream.ReadUInt8(2).SetEndianness(bigEndian), 0);
+        public static ushort ReadUInt16(this Stream stream, Endianness endianness = Endianness.Current)
+            => BitConverter.ToUInt16(stream.ReadUInt8(2).SetEndianness(endianness), 0);
 
         /// <summary>
         /// Reads multiple unsigned shorts from stream.
         /// </summary>
         /// <param name="stream">The stream to read from.</param>
         /// <param name="count">The amount of unsigned shorts.</param>
-        /// <param name="bigEndian">Determines whether to interpret the values as big endian or little endian.</param>
+        /// <param name="endianness">Determines whether to interpret the values as big endian or little endian.</param>
         /// <returns>An array of unsigned shorts read from stream.</returns>
-        public static ushort[] ReadUInt16(this Stream stream, int count, bool bigEndian = false)
+        public static ushort[] ReadUInt16(this Stream stream, int count, Endianness endianness = Endianness.Current)
         {
             ushort[] result = new ushort[count];
             for (int i = 0; i < count; i++)
             {
-                result[i] = stream.ReadUInt16(bigEndian);
+                result[i] = stream.ReadUInt16(endianness);
             }
 
             return result;
@@ -127,24 +128,24 @@ namespace ExtensionNet.Streams
         /// Reads an signed short from the stream.
         /// </summary>
         /// <param name="stream">The stream to read from.</param>
-        /// <param name="bigEndian">Determines whether to interpret the values as big endian or little endian.</param>
+        /// <param name="endianness">Determines whether to interpret the values as big endian or little endian.</param>
         /// <returns>First signed short on the stream.</returns>
-        public static short ReadInt16(this Stream stream, bool bigEndian = false)
-            => BitConverter.ToInt16(stream.ReadUInt8(2).SetEndianness(bigEndian), 0);
+        public static short ReadInt16(this Stream stream, Endianness endianness = Endianness.Current)
+            => BitConverter.ToInt16(stream.ReadUInt8(2).SetEndianness(endianness), 0);
 
         /// <summary>
         /// Reads multiple signed shorts from stream.
         /// </summary>
         /// <param name="stream">The stream to read from.</param>
         /// <param name="count">The amount of signed shorts.</param>
-        /// <param name="bigEndian">Determines whether to interpret the values as big endian or little endian.</param>
+        /// <param name="endianness">Determines whether to interpret the values as big endian or little endian.</param>
         /// <returns>An array of signed shorts read from stream.</returns>
-        public static short[] ReadInt16(this Stream stream, int count, bool bigEndian = false)
+        public static short[] ReadInt16(this Stream stream, int count, Endianness endianness = Endianness.Current)
         {
             short[] result = new short[count];
             for (int i = 0; i < count; i++)
             {
-                result[i] = stream.ReadInt16(bigEndian);
+                result[i] = stream.ReadInt16(endianness);
             }
 
             return result;
@@ -154,24 +155,24 @@ namespace ExtensionNet.Streams
         /// Reads an unsigned integer from the stream.
         /// </summary>
         /// <param name="stream">The stream to read from.</param>
-        /// <param name="bigEndian">Determines whether to interpret the values as big endian or little endian.</param>
+        /// <param name="endianness">Determines whether to interpret the values as big endian or little endian.</param>
         /// <returns>First unsigned short on the stream.</returns>
-        public static uint ReadUInt32(this Stream stream, bool bigEndian = false)
-            => BitConverter.ToUInt32(stream.ReadUInt8(4).SetEndianness(bigEndian), 0);
+        public static uint ReadUInt32(this Stream stream, Endianness endianness = Endianness.Current)
+            => BitConverter.ToUInt32(stream.ReadUInt8(4).SetEndianness(endianness), 0);
 
         /// <summary>
         /// Reads multiple unsigned integers from stream.
         /// </summary>
         /// <param name="stream">The stream to read from.</param>
         /// <param name="count">The amount of unsigned integers.</param>
-        /// <param name="bigEndian">Determines whether to interpret the values as big endian or little endian.</param>
+        /// <param name="endianness">Determines whether to interpret the values as big endian or little endian.</param>
         /// <returns>An array of unsigned integers read from stream.</returns>
-        public static uint[] ReadUInt32(this Stream stream, int count, bool bigEndian = false)
+        public static uint[] ReadUInt32(this Stream stream, int count, Endianness endianness = Endianness.Current)
         {
             uint[] result = new uint[count];
             for (int i = 0; i < count; i++)
             {
-                result[i] = stream.ReadUInt32(bigEndian);
+                result[i] = stream.ReadUInt32(endianness);
             }
 
             return result;
@@ -181,24 +182,24 @@ namespace ExtensionNet.Streams
         /// Reads an signed integer from the stream.
         /// </summary>
         /// <param name="stream">The stream to read from.</param>
-        /// <param name="bigEndian">Determines whether to interpret the values as big endian or little endian.</param>
+        /// <param name="endianness">Determines whether to interpret the values as big endian or little endian.</param>
         /// <returns>First signed short on the stream.</returns>
-        public static int ReadInt32(this Stream stream, bool bigEndian = false)
-            => BitConverter.ToInt32(stream.ReadUInt8(4).SetEndianness(bigEndian), 0);
+        public static int ReadInt32(this Stream stream, Endianness endianness = Endianness.Current)
+            => BitConverter.ToInt32(stream.ReadUInt8(4).SetEndianness(endianness), 0);
 
         /// <summary>
         /// Reads multiple signed integers from stream.
         /// </summary>
         /// <param name="stream">The stream to read from.</param>
         /// <param name="count">The amount of signed integers.</param>
-        /// <param name="bigEndian">Determines whether to interpret the values as big endian or little endian.</param>
+        /// <param name="endianness">Determines whether to interpret the values as big endian or little endian.</param>
         /// <returns>An array of signed integers read from stream.</returns>
-        public static int[] ReadInt32(this Stream stream, int count, bool bigEndian = false)
+        public static int[] ReadInt32(this Stream stream, int count, Endianness endianness = Endianness.Current)
         {
             int[] result = new int[count];
             for (int i = 0; i < count; i++)
             {
-                result[i] = stream.ReadInt32(bigEndian);
+                result[i] = stream.ReadInt32(endianness);
             }
 
             return result;
@@ -208,24 +209,24 @@ namespace ExtensionNet.Streams
         /// Reads an unsigned long from the stream.
         /// </summary>
         /// <param name="stream">The stream to read from.</param>
-        /// <param name="bigEndian">Determines whether to interpret the values as big endian or little endian.</param>
+        /// <param name="endianness">Determines whether to interpret the values as big endian or little endian.</param>
         /// <returns>First unsigned short on the stream.</returns>
-        public static ulong ReadUInt64(this Stream stream, bool bigEndian = false)
-            => BitConverter.ToUInt64(stream.ReadUInt8(8).SetEndianness(bigEndian), 0);
+        public static ulong ReadUInt64(this Stream stream, Endianness endianness = Endianness.Current)
+            => BitConverter.ToUInt64(stream.ReadUInt8(8).SetEndianness(endianness), 0);
 
         /// <summary>
         /// Reads multiple unsigned longs from stream.
         /// </summary>
         /// <param name="stream">The stream to read from.</param>
         /// <param name="count">The amount of unsigned longs.</param>
-        /// <param name="bigEndian">Determines whether to interpret the values as big endian or little endian.</param>
+        /// <param name="endianness">Determines whether to interpret the values as big endian or little endian.</param>
         /// <returns>An array of unsigned longs read from stream.</returns>
-        public static ulong[] ReadUInt64(this Stream stream, int count, bool bigEndian = false)
+        public static ulong[] ReadUInt64(this Stream stream, int count, Endianness endianness = Endianness.Current)
         {
             ulong[] result = new ulong[count];
             for (int i = 0; i < count; i++)
             {
-                result[i] = stream.ReadUInt64(bigEndian);
+                result[i] = stream.ReadUInt64(endianness);
             }
 
             return result;
@@ -235,24 +236,24 @@ namespace ExtensionNet.Streams
         /// Reads an signed long from the stream.
         /// </summary>
         /// <param name="stream">The stream to read from.</param>
-        /// <param name="bigEndian">Determines whether to interpret the values as big endian or little endian.</param>
+        /// <param name="endianness">Determines whether to interpret the values as big endian or little endian.</param>
         /// <returns>First signed short on the stream.</returns>
-        public static long ReadInt64(this Stream stream, bool bigEndian = false)
-            => BitConverter.ToInt64(stream.ReadUInt8(8).SetEndianness(bigEndian), 0);
+        public static long ReadInt64(this Stream stream, Endianness endianness = Endianness.Current)
+            => BitConverter.ToInt64(stream.ReadUInt8(8).SetEndianness(endianness), 0);
 
         /// <summary>
         /// Reads multiple signed longs from stream.
         /// </summary>
         /// <param name="stream">The stream to read from.</param>
         /// <param name="count">The amount of signed longs.</param>
-        /// <param name="bigEndian">Determines whether to interpret the values as big endian or little endian.</param>
+        /// <param name="endianness">Determines whether to interpret the values as big endian or little endian.</param>
         /// <returns>An array of signed longs read from stream.</returns>
-        public static long[] ReadInt64(this Stream stream, int count, bool bigEndian = false)
+        public static long[] ReadInt64(this Stream stream, int count, Endianness endianness = Endianness.Current)
         {
             long[] result = new long[count];
             for (int i = 0; i < count; i++)
             {
-                result[i] = stream.ReadInt64(bigEndian);
+                result[i] = stream.ReadInt64(endianness);
             }
 
             return result;
@@ -305,21 +306,21 @@ namespace ExtensionNet.Streams
         /// </summary>
         /// <param name="stream">The stream to write to.</param>
         /// <param name="value">Unsigned short to write to the stream.</param>
-        /// <param name="bigEndian">Decides whether to write the value as big endian or little endian.</param>
-        public static void Write(this Stream stream, ushort value, bool bigEndian = false)
-            => stream.Write(BitConverter.GetBytes(value).SetEndianness(bigEndian));
+        /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
+        public static void Write(this Stream stream, ushort value, Endianness endianness = Endianness.Current)
+            => stream.Write(BitConverter.GetBytes(value).SetEndianness(endianness));
 
         /// <summary>
         /// Writes unsigned shorts to the stream.
         /// </summary>
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">Unsigned shorts to write to the stream.</param>
-        /// <param name="bigEndian">Decides whether to write the value as big endian or little endian.</param>
-        public static void Write(this Stream stream, ushort[] values, bool bigEndian = false)
+        /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
+        public static void Write(this Stream stream, ushort[] values, Endianness endianness = Endianness.Current)
         {
             foreach (ushort value in values)
             {
-                stream.Write(value, bigEndian);
+                stream.Write(value, endianness);
             }
         }
 
@@ -328,21 +329,21 @@ namespace ExtensionNet.Streams
         /// </summary>
         /// <param name="stream">The stream to write to.</param>
         /// <param name="value">Signed short to write to the stream.</param>
-        /// <param name="bigEndian">Decides whether to write the value as big endian or little endian.</param>
-        public static void Write(this Stream stream, short value, bool bigEndian = false)
-            => stream.Write(BitConverter.GetBytes(value).SetEndianness(bigEndian));
+        /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
+        public static void Write(this Stream stream, short value, Endianness endianness = Endianness.Current)
+            => stream.Write(BitConverter.GetBytes(value).SetEndianness(endianness));
 
         /// <summary>
         /// Writes signed shorts to the stream.
         /// </summary>
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">Signed shorts to write to the stream.</param>
-        /// <param name="bigEndian">Decides whether to write the value as big endian or little endian.</param>
-        public static void Write(this Stream stream, short[] values, bool bigEndian = false)
+        /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
+        public static void Write(this Stream stream, short[] values, Endianness endianness = Endianness.Current)
         {
             foreach (short value in values)
             {
-                stream.Write(value, bigEndian);
+                stream.Write(value, endianness);
             }
         }
 
@@ -351,21 +352,21 @@ namespace ExtensionNet.Streams
         /// </summary>
         /// <param name="stream">The stream to write to.</param>
         /// <param name="value">Unsigned integer to write to the stream.</param>
-        /// <param name="bigEndian">Decides whether to write the value as big endian or little endian.</param>
-        public static void Write(this Stream stream, uint value, bool bigEndian = false)
-            => stream.Write(BitConverter.GetBytes(value).SetEndianness(bigEndian));
+        /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
+        public static void Write(this Stream stream, uint value, Endianness endianness = Endianness.Current)
+            => stream.Write(BitConverter.GetBytes(value).SetEndianness(endianness));
 
         /// <summary>
         /// Writes unsigned integers to the stream.
         /// </summary>
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">Unsigned integers to write to the stream.</param>
-        /// <param name="bigEndian">Decides whether to write the value as big endian or little endian.</param>
-        public static void Write(this Stream stream, uint[] values, bool bigEndian = false)
+        /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
+        public static void Write(this Stream stream, uint[] values, Endianness endianness = Endianness.Current)
         {
             foreach (uint value in values)
             {
-                stream.Write(value, bigEndian);
+                stream.Write(value, endianness);
             }
         }
 
@@ -374,21 +375,21 @@ namespace ExtensionNet.Streams
         /// </summary>
         /// <param name="stream">The stream to write to.</param>
         /// <param name="value">Signed integer to write to the stream.</param>
-        /// <param name="bigEndian">Decides whether to write the value as big endian or little endian.</param>
-        public static void Write(this Stream stream, int value, bool bigEndian = false)
-            => stream.Write(BitConverter.GetBytes(value).SetEndianness(bigEndian));
+        /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
+        public static void Write(this Stream stream, int value, Endianness endianness = Endianness.Current)
+            => stream.Write(BitConverter.GetBytes(value).SetEndianness(endianness));
 
         /// <summary>
         /// Writes signed integers to the stream.
         /// </summary>
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">Signed integers to write to the stream.</param>
-        /// <param name="bigEndian">Decides whether to write the value as big endian or little endian.</param>
-        public static void Write(this Stream stream, int[] values, bool bigEndian = false)
+        /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
+        public static void Write(this Stream stream, int[] values, Endianness endianness = Endianness.Current)
         {
             foreach (int value in values)
             {
-                stream.Write(value, bigEndian);
+                stream.Write(value, endianness);
             }
         }
 
@@ -397,21 +398,21 @@ namespace ExtensionNet.Streams
         /// </summary>
         /// <param name="stream">The stream to write to.</param>
         /// <param name="value">Unsigned long to write to the stream.</param>
-        /// <param name="bigEndian">Decides whether to write the value as big endian or little endian.</param>
-        public static void Write(this Stream stream, ulong value, bool bigEndian = false)
-            => stream.Write(BitConverter.GetBytes(value).SetEndianness(bigEndian));
+        /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
+        public static void Write(this Stream stream, ulong value, Endianness endianness = Endianness.Current)
+            => stream.Write(BitConverter.GetBytes(value).SetEndianness(endianness));
 
         /// <summary>
         /// Writes unsigned longs to the stream.
         /// </summary>
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">Unsigned longs to write to the stream.</param>
-        /// <param name="bigEndian">Decides whether to write the value as big endian or little endian.</param>
-        public static void Write(this Stream stream, ulong[] values, bool bigEndian = false)
+        /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
+        public static void Write(this Stream stream, ulong[] values, Endianness endianness = Endianness.Current)
         {
             foreach (ulong value in values)
             {
-                stream.Write(value, bigEndian);
+                stream.Write(value, endianness);
             }
         }
 
@@ -420,27 +421,27 @@ namespace ExtensionNet.Streams
         /// </summary>
         /// <param name="stream">The stream to write to.</param>
         /// <param name="value">Signed long to write to the stream.</param>
-        /// <param name="bigEndian">Decides whether to write the value as big endian or little endian.</param>
-        public static void Write(this Stream stream, long value, bool bigEndian = false)
-            => stream.Write(BitConverter.GetBytes(value).SetEndianness(bigEndian));
+        /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
+        public static void Write(this Stream stream, long value, Endianness endianness = Endianness.Current)
+            => stream.Write(BitConverter.GetBytes(value).SetEndianness(endianness));
 
         /// <summary>
         /// Writes signed longs to the stream.
         /// </summary>
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">Signed longs to write to the stream.</param>
-        /// <param name="bigEndian">Decides whether to write the value as big endian or little endian.</param>
-        public static void Write(this Stream stream, long[] values, bool bigEndian = false)
+        /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
+        public static void Write(this Stream stream, long[] values, Endianness endianness = Endianness.Current)
         {
             foreach (long value in values)
             {
-                stream.Write(value, bigEndian);
+                stream.Write(value, endianness);
             }
         }
 
-        private static byte[] SetEndianness(this byte[] bytes, bool bigEndian)
+        private static byte[] SetEndianness(this byte[] bytes, Endianness endianness)
         {
-            if ((BitConverter.IsLittleEndian && bigEndian) || (!BitConverter.IsLittleEndian && !bigEndian))
+            if ((BitConverter.IsLittleEndian && endianness == Endianness.BigEndian) || (!BitConverter.IsLittleEndian && endianness == Endianness.LittleEndian))
             {
                 Array.Reverse(bytes);
             }

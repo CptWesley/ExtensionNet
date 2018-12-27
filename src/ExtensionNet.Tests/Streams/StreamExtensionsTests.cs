@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using ExtensionNet.Streams;
+using ExtensionNet.Types;
 using Xunit;
 
 using static AssertNet.Xunit.Assertions;
@@ -156,11 +157,11 @@ namespace ExtensionNet.Tests.Streams
         public void EndiannessTest()
         {
             long value = 43562456343564356;
-            stream.Write(value, true);
+            stream.Write(value, Endianness.BigEndian);
             stream.Position = 0;
-            AssertThat(stream.ReadInt64(false)).IsNotEqualTo(value);
+            AssertThat(stream.ReadInt64(Endianness.LittleEndian)).IsNotEqualTo(value);
             stream.Position = 0;
-            AssertThat(stream.ReadInt64(true)).IsEqualTo(value);
+            AssertThat(stream.ReadInt64(Endianness.BigEndian)).IsEqualTo(value);
         }
 
         /// <summary>
