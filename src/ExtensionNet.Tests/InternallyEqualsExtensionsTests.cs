@@ -181,5 +181,51 @@ namespace ExtensionNet.Tests
             DummyClasses.OverriddenClass a = new DummyClasses.OverriddenClass();
             AssertThat(a).IsEqualTo(a);
         }
+
+        /// <summary>
+        /// Checks that things are not equal to null.
+        /// </summary>
+        [Fact]
+        public static void NullTest()
+        {
+            DummyClasses.OverriddenClass a = new DummyClasses.OverriddenClass();
+            AssertThat(a.InternallyEquals(null, true)).IsFalse();
+        }
+
+        /// <summary>
+        /// Checks that things with different types are not equal.
+        /// </summary>
+        [Fact]
+        public static void DifferentTypesTest()
+        {
+            DummyClasses.OverriddenClass a = new DummyClasses.OverriddenClass();
+            DummyClasses.CircularClass b = new DummyClasses.CircularClass();
+            AssertThat(a.InternallyEquals(b, true)).IsFalse();
+        }
+
+        /// <summary>
+        /// Checks that arrays with different lengths are not equal.
+        /// </summary>
+        [Fact]
+        public static void DifferentArrayLengthTest()
+        {
+            int[] a = new int[5];
+            int[] b = new int[4];
+            AssertThat(a.InternallyEquals(b, true)).IsFalse();
+        }
+
+        /// <summary>
+        /// Checks that arrays with nulls are considered equal.
+        /// </summary>
+        [Fact]
+        public static void NullArrayTest()
+        {
+            object[] a = new object[5];
+            object[] b = new object[5];
+            AssertThat(a.InternallyEquals(b, true)).IsTrue();
+
+            DummyClasses.CircularClass[] c = new DummyClasses.CircularClass[5];
+            AssertThat(a.InternallyEquals(c, true)).IsFalse();
+        }
     }
 }

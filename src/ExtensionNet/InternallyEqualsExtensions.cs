@@ -30,9 +30,9 @@ namespace ExtensionNet
 
         private static bool InternallyEquals(this object that, object other, bool deep, Dictionary<ReferenceWrapper, HashSet<ReferenceWrapper>> comparisons)
         {
-            if (that == null)
+            if (that is null)
             {
-                return that == other;
+                return other is null;
             }
 
             if (other is null)
@@ -82,7 +82,7 @@ namespace ExtensionNet
             {
                 object thatCur = that.GetValue(i);
                 object otherCur = other.GetValue(i);
-                if (thatCur == null && otherCur == null)
+                if (thatCur is null && otherCur is null)
                 {
                     continue;
                 }

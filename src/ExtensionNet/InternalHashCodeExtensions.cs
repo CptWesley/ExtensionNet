@@ -24,11 +24,11 @@ namespace ExtensionNet
         /// <param name="deep">Whether or not to get the hash code recursively.</param>
         /// <returns>The internal hash code retrieved using reflection.</returns>
         public static int GetInternalHashCode(this object that, bool deep)
-            => that.GetInternalHashCode(deep, new Dictionary<ReferenceWrapper, int>());
+            => that.GetInternalHashCode(deep, new HashSet<ReferenceWrapper>());
 
-        private static int GetInternalHashCode(this object that, bool deep, Dictionary<ReferenceWrapper, int> hashes)
+        private static int GetInternalHashCode(this object that, bool deep, HashSet<ReferenceWrapper> hashes)
         {
-            if (that == null)
+            if (that is null)
             {
                 return 0;
             }
@@ -41,10 +41,12 @@ namespace ExtensionNet
 
             ReferenceWrapper thatWrapper = new ReferenceWrapper(that);
 
-            if (hashes.TryGetValue(thatWrapper, out int hash))
+            if (hashes.Contains(thatWrapper))
             {
-                return hash;
+                return thatWrapper.Target.GetType().GetHashCode();
             }
+
+            hashes.Add(thatWrapper);
 
             int result;
             if (type.IsArray)
@@ -56,11 +58,10 @@ namespace ExtensionNet
                 result = GetObjectHash(that, deep, hashes);
             }
 
-            hashes.Add(thatWrapper, result);
             return result;
         }
 
-        private static int GetArrayHash(Array that, bool deep, Dictionary<ReferenceWrapper, int> hashes)
+        private static int GetArrayHash(Array that, bool deep, HashSet<ReferenceWrapper> hashes)
         {
             int result = that.GetType().GetHashCode();
 
@@ -73,7 +74,7 @@ namespace ExtensionNet
             return result;
         }
 
-        private static int GetObjectHash(object that, bool deep, Dictionary<ReferenceWrapper, int> hashes)
+        private static int GetObjectHash(object that, bool deep, HashSet<ReferenceWrapper> hashes)
         {
             Type type = that.GetType();
             int result = type.GetHashCode();
