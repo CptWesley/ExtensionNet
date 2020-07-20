@@ -3,7 +3,7 @@ using System.Text;
 using ExtensionNet.Reflective;
 using Xunit;
 
-using static AssertNet.Xunit.Assertions;
+using static AssertNet.Assertions;
 
 namespace ExtensionNet.Tests.Reflective
 {
