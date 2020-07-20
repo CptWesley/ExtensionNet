@@ -1,9 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Numerics;
-using ExtensionNet.Types;
 
-namespace ExtensionNet.Streams
+namespace ExtensionNet
 {
     /// <summary>
     /// Extension class for the <see cref="Stream"/> class.
@@ -616,16 +615,6 @@ namespace ExtensionNet.Streams
             }
 
             return result;
-        }
-
-        private static byte[] SetEndianness(this byte[] bytes, Endianness endianness)
-        {
-            if ((BitConverter.IsLittleEndian && endianness == Endianness.BigEndian) || (!BitConverter.IsLittleEndian && endianness == Endianness.LittleEndian))
-            {
-                Array.Reverse(bytes);
-            }
-
-            return bytes;
         }
     }
 }

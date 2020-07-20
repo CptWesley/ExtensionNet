@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace ExtensionNet.Types
+namespace ExtensionNet
 {
     /// <summary>
     /// Enum to indicate endianness.
@@ -21,6 +21,6 @@ namespace ExtensionNet.Types
         /// <summary>
         /// Indicates that the endianness of the current platform should be used.
         /// </summary>
-        Current
+        Current,
     }
 }

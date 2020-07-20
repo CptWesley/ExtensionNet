@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace ExtensionNet.Reflective
+namespace ExtensionNet
 {
     /// <summary>
     /// Static extension class adding methods to objects to retrieve a hashcode calculated using reflection.

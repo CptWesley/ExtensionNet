@@ -1,9 +1,9 @@
-﻿using ExtensionNet.Endian;
+﻿using ExtensionNet;
 using Xunit;
 
 using static AssertNet.Assertions;
 
-namespace ExtensionNet.Tests.Endian
+namespace ExtensionNet.Tests
 {
     /// <summary>
     /// Test class for the <see cref="EndianExtensions"/> class.

@@ -1,6 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 
-namespace ExtensionNet.Reflective
+namespace ExtensionNet
 {
     /// <summary>
     /// Class which wraps an object so we can compare the references.

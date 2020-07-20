@@ -1,13 +1,11 @@
 ﻿using System;
 using System.IO;
 using System.Numerics;
-using ExtensionNet.Streams;
-using ExtensionNet.Types;
 using Xunit;
 
 using static AssertNet.Assertions;
 
-namespace ExtensionNet.Tests.Streams
+namespace ExtensionNet.Tests
 {
     /// <summary>
     /// Test class for the <see cref="StreamExtensions"/> class.

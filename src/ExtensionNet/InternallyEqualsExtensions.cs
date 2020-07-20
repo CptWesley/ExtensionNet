@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace ExtensionNet.Reflective
+namespace ExtensionNet
 {
     /// <summary>
     /// Static extension class which adds an internal equals method to every object.

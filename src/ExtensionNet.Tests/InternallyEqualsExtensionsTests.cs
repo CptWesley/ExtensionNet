@@ -1,9 +1,8 @@
 ﻿using System;
-using ExtensionNet.Reflective;
 using Xunit;
 using static AssertNet.Assertions;
 
-namespace ExtensionNet.Tests.Reflective
+namespace ExtensionNet.Tests
 {
     /// <summary>
     /// Test class for the <see cref="InternallyEqualsExtensions"/> class.
