@@ -518,21 +518,44 @@ namespace ExtensionNet
             => stream.Write(value?.ToCharArray());
 
         /// <summary>
+        /// Writes a char to the stream.
+        /// </summary>
+        /// <param name="stream">The stream to write to.</param>
+        /// <param name="value">Char to write to the stream.</param>
+        public static void Write(this Stream stream, char value)
+            => stream.Write((byte)value);
+
+        /// <summary>
         /// Writes chars to the stream.
         /// </summary>
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">Chars to write to the stream.</param>
-        public static void Write(this Stream stream, params char[] values)
+        public static void Write(this Stream stream, char[] values)
+        {
+            if (values is null)
+            {
+                throw new ArgumentNullException(nameof(values));
+            }
+
+            foreach (char value in values)
+            {
+                stream.Write(value);
+            }
+        }
+
+        /// <summary>
+        /// Writes a byte to the stream.
+        /// </summary>
+        /// <param name="stream">The stream to write to.</param>
+        /// <param name="value">Byte to write to the stream.</param>
+        public static void Write(this Stream stream, byte value)
         {
             if (stream is null)
             {
                 throw new ArgumentNullException(nameof(stream));
             }
 
-            foreach (char value in values)
-            {
-                stream.WriteByte((byte)value);
-            }
+            stream.WriteByte((byte)value);
         }
 
         /// <summary>
@@ -540,31 +563,44 @@ namespace ExtensionNet
         /// </summary>
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">Bytes to write to the stream.</param>
-        public static void Write(this Stream stream, params byte[] values)
+        public static void Write(this Stream stream, byte[] values)
         {
             if (stream is null)
             {
                 throw new ArgumentNullException(nameof(stream));
+            }
+
+            if (values is null)
+            {
+                throw new ArgumentNullException(nameof(values));
             }
 
             stream.Write(values, 0, values.Length);
         }
 
         /// <summary>
+        /// Writes a signed byte to the stream.
+        /// </summary>
+        /// <param name="stream">The stream to write to.</param>
+        /// <param name="value">Signed byte to write to the stream.</param>
+        public static void Write(this Stream stream, sbyte value)
+            => stream.Write((byte)value);
+
+        /// <summary>
         /// Writes signed bytes to the stream.
         /// </summary>
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">Signed bytes to write to the stream.</param>
-        public static void Write(this Stream stream, params sbyte[] values)
+        public static void Write(this Stream stream, sbyte[] values)
         {
-            if (stream is null)
+            if (values is null)
             {
-                throw new ArgumentNullException(nameof(stream));
+                throw new ArgumentNullException(nameof(values));
             }
 
             foreach (sbyte value in values)
             {
-                stream.WriteByte((byte)value);
+                stream.Write(value);
             }
         }
 
