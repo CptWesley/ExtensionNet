@@ -163,6 +163,32 @@ namespace ExtensionNet.Tests
         }
 
         /// <summary>
+        /// Checks that the method returns the right value.
+        /// </summary>
+        [Fact]
+        public void ReadFloat32Test()
+        {
+            float[] values = new float[] { -9f, 432f, -56f, 1.5f };
+            stream.Write(values);
+            stream.Position = 0;
+            AssertThat(stream.ReadFloat32()).IsEqualTo(-9);
+            AssertThat(stream.ReadFloat32(3)).ContainsExactly(432, -56, 1.5f);
+        }
+
+        /// <summary>
+        /// Checks that the method returns the right value.
+        /// </summary>
+        [Fact]
+        public void ReadFloat64Test()
+        {
+            double[] values = new double[] { -9d, 432d, -56d, 1.5d };
+            stream.Write(values);
+            stream.Position = 0;
+            AssertThat(stream.ReadFloat64()).IsEqualTo(-9);
+            AssertThat(stream.ReadFloat64(3)).ContainsExactly(432, -56, 1.5f);
+        }
+
+        /// <summary>
         /// Checks that endianness matters.
         /// </summary>
         [Fact]

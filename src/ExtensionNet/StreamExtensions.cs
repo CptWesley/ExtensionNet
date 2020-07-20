@@ -301,6 +301,60 @@ namespace ExtensionNet
         }
 
         /// <summary>
+        /// Reads a float from the stream.
+        /// </summary>
+        /// <param name="stream">The stream to read from.</param>
+        /// <param name="endianness">Determines whether to interpret the values as big endian or little endian.</param>
+        /// <returns>First float on the stream.</returns>
+        public static float ReadFloat32(this Stream stream, Endianness endianness = Endianness.Current)
+            => BitConverter.ToSingle(stream.ReadUInt8(4).SetEndianness(endianness), 0);
+
+        /// <summary>
+        /// Reads multiple floats from stream.
+        /// </summary>
+        /// <param name="stream">The stream to read from.</param>
+        /// <param name="count">The amount of floats.</param>
+        /// <param name="endianness">Determines whether to interpret the values as big endian or little endian.</param>
+        /// <returns>An array of floats read from stream.</returns>
+        public static float[] ReadFloat32(this Stream stream, int count, Endianness endianness = Endianness.Current)
+        {
+            float[] result = new float[count];
+            for (int i = 0; i < count; i++)
+            {
+                result[i] = stream.ReadFloat32(endianness);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Reads a double from the stream.
+        /// </summary>
+        /// <param name="stream">The stream to read from.</param>
+        /// <param name="endianness">Determines whether to interpret the values as big endian or little endian.</param>
+        /// <returns>First double on the stream.</returns>
+        public static double ReadFloat64(this Stream stream, Endianness endianness = Endianness.Current)
+            => BitConverter.ToDouble(stream.ReadUInt8(8).SetEndianness(endianness), 0);
+
+        /// <summary>
+        /// Reads multiple doubles from stream.
+        /// </summary>
+        /// <param name="stream">The stream to read from.</param>
+        /// <param name="count">The amount of doubles.</param>
+        /// <param name="endianness">Determines whether to interpret the values as big endian or little endian.</param>
+        /// <returns>An array of doubles read from stream.</returns>
+        public static double[] ReadFloat64(this Stream stream, int count, Endianness endianness = Endianness.Current)
+        {
+            double[] result = new double[count];
+            for (int i = 0; i < count; i++)
+            {
+                result[i] = stream.ReadFloat64(endianness);
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Writes a string to the stream.
         /// </summary>
         /// <param name="stream">The stream to write to.</param>
@@ -595,6 +649,62 @@ namespace ExtensionNet
             }
 
             foreach (BigInteger value in values)
+            {
+                stream.Write(value, endianness);
+            }
+        }
+
+        /// <summary>
+        /// Writes float to the stream.
+        /// </summary>
+        /// <param name="stream">The stream to write to.</param>
+        /// <param name="value">Signed long to write to the stream.</param>
+        /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
+        public static void Write(this Stream stream, float value, Endianness endianness = Endianness.Current)
+            => stream.Write(BitConverter.GetBytes(value).SetEndianness(endianness));
+
+        /// <summary>
+        /// Writes float to the stream.
+        /// </summary>
+        /// <param name="stream">The stream to write to.</param>
+        /// <param name="values">Signed longs to write to the stream.</param>
+        /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
+        public static void Write(this Stream stream, float[] values, Endianness endianness = Endianness.Current)
+        {
+            if (values is null)
+            {
+                throw new ArgumentNullException(nameof(values));
+            }
+
+            foreach (float value in values)
+            {
+                stream.Write(value, endianness);
+            }
+        }
+
+        /// <summary>
+        /// Writes double to the stream.
+        /// </summary>
+        /// <param name="stream">The stream to write to.</param>
+        /// <param name="value">Signed long to write to the stream.</param>
+        /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
+        public static void Write(this Stream stream, double value, Endianness endianness = Endianness.Current)
+            => stream.Write(BitConverter.GetBytes(value).SetEndianness(endianness));
+
+        /// <summary>
+        /// Writes doubles to the stream.
+        /// </summary>
+        /// <param name="stream">The stream to write to.</param>
+        /// <param name="values">Signed longs to write to the stream.</param>
+        /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
+        public static void Write(this Stream stream, double[] values, Endianness endianness = Endianness.Current)
+        {
+            if (values is null)
+            {
+                throw new ArgumentNullException(nameof(values));
+            }
+
+            foreach (double value in values)
             {
                 stream.Write(value, endianness);
             }

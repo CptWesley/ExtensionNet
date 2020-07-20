@@ -60,5 +60,23 @@ namespace ExtensionNet
         /// <returns>The bytes representing the value.</returns>
         public static byte[] GetBytes(this ulong value, Endianness endianness = Endianness.Current)
             => BitConverter.GetBytes(value).SetEndianness(endianness);
+
+        /// <summary>
+        /// Gets the bytes of the value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="endianness">The endianness.</param>
+        /// <returns>The bytes representing the value.</returns>
+        public static byte[] GetBytes(this float value, Endianness endianness = Endianness.Current)
+            => BitConverter.GetBytes(value).SetEndianness(endianness);
+
+        /// <summary>
+        /// Gets the bytes of the value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="endianness">The endianness.</param>
+        /// <returns>The bytes representing the value.</returns>
+        public static byte[] GetBytes(this double value, Endianness endianness = Endianness.Current)
+            => BitConverter.GetBytes(value).SetEndianness(endianness);
     }
 }

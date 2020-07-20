@@ -23,7 +23,7 @@ namespace ExtensionNet.Tests
         /// Checks that the ToBytes method functions correctly.
         /// </summary>
         [Fact]
-        public static void UShortToBytesTest()
+        public static void UnsignedShortToBytesTest()
         {
             AssertThat(((ushort)45).GetBytes(Endianness.BigEndian)).ContainsExactly(new byte[] { 0, 45 });
             AssertThat(((ushort)34).GetBytes(Endianness.LittleEndian)).ContainsExactly(new byte[] { 34, 0 });
@@ -43,7 +43,7 @@ namespace ExtensionNet.Tests
         /// Checks that the ToBytes method functions correctly.
         /// </summary>
         [Fact]
-        public static void UIntToBytesTest()
+        public static void UnsignedIntToBytesTest()
         {
             AssertThat(513u.GetBytes(Endianness.BigEndian)).ContainsExactly(new byte[] { 0, 0, 2, 1 });
             AssertThat(300u.GetBytes(Endianness.LittleEndian)).ContainsExactly(new byte[] { 44, 1, 0, 0 });
@@ -63,10 +63,30 @@ namespace ExtensionNet.Tests
         /// Checks that the ToBytes method functions correctly.
         /// </summary>
         [Fact]
-        public static void ULongToBytesTest()
+        public static void UnsignedLongToBytesTest()
         {
             AssertThat(513UL.GetBytes(Endianness.BigEndian)).ContainsExactly(new byte[] { 0, 0, 0, 0, 0, 0, 2, 1 });
             AssertThat(300UL.GetBytes(Endianness.LittleEndian)).ContainsExactly(new byte[] { 44, 1, 0, 0, 0, 0, 0, 0 });
+        }
+
+        /// <summary>
+        /// Checks that the ToBytes method functions correctly.
+        /// </summary>
+        [Fact]
+        public static void FloatToBytesTest()
+        {
+            AssertThat(513f.GetBytes(Endianness.BigEndian)).ContainsExactly(new byte[] { 68, 0, 64, 0 });
+            AssertThat(513f.GetBytes(Endianness.LittleEndian)).ContainsExactly(new byte[] { 0, 64, 0, 68 });
+        }
+
+        /// <summary>
+        /// Checks that the ToBytes method functions correctly.
+        /// </summary>
+        [Fact]
+        public static void DoubleToBytesTest()
+        {
+            AssertThat(513d.GetBytes(Endianness.BigEndian)).ContainsExactly(new byte[] { 64, 128, 8, 0, 0, 0, 0, 0 });
+            AssertThat(513d.GetBytes(Endianness.LittleEndian)).ContainsExactly(new byte[] { 0, 0, 0, 0, 0, 8, 128, 64 });
         }
     }
 }
