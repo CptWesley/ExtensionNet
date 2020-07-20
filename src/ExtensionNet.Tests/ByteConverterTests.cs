@@ -17,6 +17,7 @@ namespace ExtensionNet.Tests
         {
             AssertThat(((short)19).GetBytes(Endianness.BigEndian)).ContainsExactly(new byte[] { 0, 19 });
             AssertThat(((short)44).GetBytes(Endianness.LittleEndian)).ContainsExactly(new byte[] { 44, 0 });
+            AssertThat(((short)-32).GetBytes().ToInt16()).IsEqualTo(-32);
         }
 
         /// <summary>
@@ -27,6 +28,7 @@ namespace ExtensionNet.Tests
         {
             AssertThat(((ushort)45).GetBytes(Endianness.BigEndian)).ContainsExactly(new byte[] { 0, 45 });
             AssertThat(((ushort)34).GetBytes(Endianness.LittleEndian)).ContainsExactly(new byte[] { 34, 0 });
+            AssertThat(((ushort)32).GetBytes().ToUInt16()).IsEqualTo(32);
         }
 
         /// <summary>
@@ -37,6 +39,7 @@ namespace ExtensionNet.Tests
         {
             AssertThat(513.GetBytes(Endianness.BigEndian)).ContainsExactly(new byte[] { 0, 0, 2, 1 });
             AssertThat(300.GetBytes(Endianness.LittleEndian)).ContainsExactly(new byte[] { 44, 1, 0, 0 });
+            AssertThat(-32.GetBytes().ToInt32()).IsEqualTo(-32);
         }
 
         /// <summary>
@@ -47,6 +50,7 @@ namespace ExtensionNet.Tests
         {
             AssertThat(513u.GetBytes(Endianness.BigEndian)).ContainsExactly(new byte[] { 0, 0, 2, 1 });
             AssertThat(300u.GetBytes(Endianness.LittleEndian)).ContainsExactly(new byte[] { 44, 1, 0, 0 });
+            AssertThat(32u.GetBytes().ToUInt32()).IsEqualTo(32u);
         }
 
         /// <summary>
@@ -57,6 +61,7 @@ namespace ExtensionNet.Tests
         {
             AssertThat(513L.GetBytes(Endianness.BigEndian)).ContainsExactly(new byte[] { 0, 0, 0, 0, 0, 0, 2, 1 });
             AssertThat(300L.GetBytes(Endianness.LittleEndian)).ContainsExactly(new byte[] { 44, 1, 0, 0, 0, 0, 0, 0 });
+            AssertThat(-32L.GetBytes().ToInt64()).IsEqualTo(-32L);
         }
 
         /// <summary>
@@ -67,6 +72,7 @@ namespace ExtensionNet.Tests
         {
             AssertThat(513UL.GetBytes(Endianness.BigEndian)).ContainsExactly(new byte[] { 0, 0, 0, 0, 0, 0, 2, 1 });
             AssertThat(300UL.GetBytes(Endianness.LittleEndian)).ContainsExactly(new byte[] { 44, 1, 0, 0, 0, 0, 0, 0 });
+            AssertThat(32UL.GetBytes().ToUInt64()).IsEqualTo(32UL);
         }
 
         /// <summary>
@@ -77,6 +83,7 @@ namespace ExtensionNet.Tests
         {
             AssertThat(513f.GetBytes(Endianness.BigEndian)).ContainsExactly(new byte[] { 68, 0, 64, 0 });
             AssertThat(513f.GetBytes(Endianness.LittleEndian)).ContainsExactly(new byte[] { 0, 64, 0, 68 });
+            AssertThat(1.5f.GetBytes().ToFloat32()).IsEqualTo(1.5f);
         }
 
         /// <summary>
@@ -87,6 +94,7 @@ namespace ExtensionNet.Tests
         {
             AssertThat(513d.GetBytes(Endianness.BigEndian)).ContainsExactly(new byte[] { 64, 128, 8, 0, 0, 0, 0, 0 });
             AssertThat(513d.GetBytes(Endianness.LittleEndian)).ContainsExactly(new byte[] { 0, 0, 0, 0, 0, 8, 128, 64 });
+            AssertThat(1.5d.GetBytes().ToFloat64()).IsEqualTo(1.5d);
         }
     }
 }
