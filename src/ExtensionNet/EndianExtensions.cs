@@ -1,5 +1,4 @@
 ﻿using System;
-using ExtensionNet;
 
 namespace ExtensionNet
 {
