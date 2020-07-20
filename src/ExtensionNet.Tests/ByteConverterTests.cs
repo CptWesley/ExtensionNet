@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using System.Numerics;
+using Xunit;
 
 using static AssertNet.Assertions;
 
@@ -95,6 +96,18 @@ namespace ExtensionNet.Tests
             AssertThat(513d.GetBytes(Endianness.BigEndian)).ContainsExactly(new byte[] { 64, 128, 8, 0, 0, 0, 0, 0 });
             AssertThat(513d.GetBytes(Endianness.LittleEndian)).ContainsExactly(new byte[] { 0, 0, 0, 0, 0, 8, 128, 64 });
             AssertThat(1.5d.GetBytes().ToFloat64()).IsEqualTo(1.5d);
+        }
+
+        /// <summary>
+        /// Checks that the ToBytes method functions correctly.
+        /// </summary>
+        [Fact]
+        public static void BigIntegerTest()
+        {
+            BigInteger value = new BigInteger(int.MaxValue) * new BigInteger(int.MaxValue);
+            AssertThat(value.GetBytes(2048, Endianness.BigEndian).ToBigInteger(Endianness.BigEndian)).IsEqualTo(value);
+            AssertThat(value.GetBytes(2048, Endianness.LittleEndian).ToBigInteger(Endianness.LittleEndian)).IsEqualTo(value);
+            AssertThat(value.GetBytes(2048).ToBigInteger()).IsEqualTo(value);
         }
     }
 }
