@@ -14,7 +14,7 @@ jobs:
           name: Tests
           command: |
                    cd src
-                   dotnet test ExtensionNet.Tests /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=bin/
+                   dotnet test
       - run:
           name: Codecov
           command: |
