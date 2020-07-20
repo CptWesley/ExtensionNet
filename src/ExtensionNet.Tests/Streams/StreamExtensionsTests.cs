@@ -13,7 +13,7 @@ namespace ExtensionNet.Tests.Streams
     /// </summary>
     public sealed class StreamExtensionsTests : IDisposable
     {
-        private Stream stream;
+        private readonly Stream stream;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="StreamExtensionsTests"/> class.

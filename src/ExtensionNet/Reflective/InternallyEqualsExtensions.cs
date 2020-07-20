@@ -35,6 +35,11 @@ namespace ExtensionNet.Reflective
                 return that == other;
             }
 
+            if (other is null)
+            {
+                return false;
+            }
+
             Type type = that.GetType();
 
             if (that is string || type.IsPrimitive)

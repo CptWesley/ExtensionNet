@@ -112,8 +112,10 @@ namespace ExtensionNet.Tests.Reflective
         [Fact]
         public static void InheritanceTest()
         {
-            DummyClasses.SonClass a = new DummyClasses.SonClass();
-            a.PublicValue = 42;
+            DummyClasses.SonClass a = new DummyClasses.SonClass
+            {
+                PublicValue = 42,
+            };
             a.SetPrivateValue(1337);
             a.SonValue = 50;
             DummyClasses.SonClass b = a.Copy(true);

@@ -15,7 +15,7 @@ namespace ExtensionNet.Streams
         /// <param name="stream">The stream to read from.</param>
         /// <returns>First char on the stream.</returns>
         public static char ReadChar(this Stream stream)
-            => (char)stream.ReadByte();
+            => (char)stream.ReadUInt8();
 
         /// <summary>
         /// Reads multiple chars from stream.
@@ -57,7 +57,14 @@ namespace ExtensionNet.Streams
         /// <param name="stream">The stream to read from.</param>
         /// <returns>First byte on the stream.</returns>
         public static byte ReadUInt8(this Stream stream)
-            => (byte)stream.ReadByte();
+        {
+            if (stream is null)
+            {
+                throw new ArgumentNullException(nameof(stream));
+            }
+
+            return (byte)stream.ReadByte();
+        }
 
         /// <summary>
         /// Reads multiple bytes from stream.
@@ -67,6 +74,11 @@ namespace ExtensionNet.Streams
         /// <returns>An array of bytes read from stream.</returns>
         public static byte[] ReadUInt8(this Stream stream, int count)
         {
+            if (stream is null)
+            {
+                throw new ArgumentNullException(nameof(stream));
+            }
+
             byte[] bytes = new byte[count];
             stream.Read(bytes, 0, count);
             return bytes;
@@ -78,7 +90,7 @@ namespace ExtensionNet.Streams
         /// <param name="stream">The stream to read from.</param>
         /// <returns>First signed byte on the stream.</returns>
         public static sbyte ReadInt8(this Stream stream)
-            => (sbyte)stream.ReadByte();
+            => (sbyte)stream.ReadUInt8();
 
         /// <summary>
         /// Reads multiple signed bytes from stream.
@@ -265,7 +277,7 @@ namespace ExtensionNet.Streams
         /// <param name="stream">The stream to write to.</param>
         /// <param name="value">String to write to stream.</param>
         public static void Write(this Stream stream, string value)
-            => stream.Write(value.ToCharArray());
+            => stream.Write(value?.ToCharArray());
 
         /// <summary>
         /// Writes chars to the stream.
@@ -274,6 +286,11 @@ namespace ExtensionNet.Streams
         /// <param name="values">Chars to write to the stream.</param>
         public static void Write(this Stream stream, params char[] values)
         {
+            if (stream is null)
+            {
+                throw new ArgumentNullException(nameof(stream));
+            }
+
             foreach (char value in values)
             {
                 stream.WriteByte((byte)value);
@@ -286,7 +303,14 @@ namespace ExtensionNet.Streams
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">Bytes to write to the stream.</param>
         public static void Write(this Stream stream, params byte[] values)
-            => stream.Write(values, 0, values.Length);
+        {
+            if (stream is null)
+            {
+                throw new ArgumentNullException(nameof(stream));
+            }
+
+            stream.Write(values, 0, values.Length);
+        }
 
         /// <summary>
         /// Writes signed bytes to the stream.
@@ -295,6 +319,11 @@ namespace ExtensionNet.Streams
         /// <param name="values">Signed bytes to write to the stream.</param>
         public static void Write(this Stream stream, params sbyte[] values)
         {
+            if (stream is null)
+            {
+                throw new ArgumentNullException(nameof(stream));
+            }
+
             foreach (sbyte value in values)
             {
                 stream.WriteByte((byte)value);
@@ -318,6 +347,11 @@ namespace ExtensionNet.Streams
         /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
         public static void Write(this Stream stream, ushort[] values, Endianness endianness = Endianness.Current)
         {
+            if (values is null)
+            {
+                throw new ArgumentNullException(nameof(values));
+            }
+
             foreach (ushort value in values)
             {
                 stream.Write(value, endianness);
@@ -341,6 +375,11 @@ namespace ExtensionNet.Streams
         /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
         public static void Write(this Stream stream, short[] values, Endianness endianness = Endianness.Current)
         {
+            if (values is null)
+            {
+                throw new ArgumentNullException(nameof(values));
+            }
+
             foreach (short value in values)
             {
                 stream.Write(value, endianness);
@@ -364,6 +403,11 @@ namespace ExtensionNet.Streams
         /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
         public static void Write(this Stream stream, uint[] values, Endianness endianness = Endianness.Current)
         {
+            if (values is null)
+            {
+                throw new ArgumentNullException(nameof(values));
+            }
+
             foreach (uint value in values)
             {
                 stream.Write(value, endianness);
@@ -387,6 +431,11 @@ namespace ExtensionNet.Streams
         /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
         public static void Write(this Stream stream, int[] values, Endianness endianness = Endianness.Current)
         {
+            if (values is null)
+            {
+                throw new ArgumentNullException(nameof(values));
+            }
+
             foreach (int value in values)
             {
                 stream.Write(value, endianness);
@@ -410,6 +459,11 @@ namespace ExtensionNet.Streams
         /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
         public static void Write(this Stream stream, ulong[] values, Endianness endianness = Endianness.Current)
         {
+            if (values is null)
+            {
+                throw new ArgumentNullException(nameof(values));
+            }
+
             foreach (ulong value in values)
             {
                 stream.Write(value, endianness);
@@ -433,6 +487,11 @@ namespace ExtensionNet.Streams
         /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
         public static void Write(this Stream stream, long[] values, Endianness endianness = Endianness.Current)
         {
+            if (values is null)
+            {
+                throw new ArgumentNullException(nameof(values));
+            }
+
             foreach (long value in values)
             {
                 stream.Write(value, endianness);
