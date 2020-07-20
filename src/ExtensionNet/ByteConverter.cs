@@ -182,12 +182,13 @@ namespace ExtensionNet
 
             byte[] bytes = value.ToByteArray();
             int filler = size - bytes.Length;
-            byte[] result = new byte[bytes.Length + filler];
 
             if (filler < 0)
             {
                 throw new ArgumentException($"The given size ({size}) can't be smaller than the number of bytes required to represent the value ({bytes.Length}).", nameof(size));
             }
+
+            byte[] result = new byte[bytes.Length + filler];
 
             if (endianness == Endianness.LittleEndian)
             {

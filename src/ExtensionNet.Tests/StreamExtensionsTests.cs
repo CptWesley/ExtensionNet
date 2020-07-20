@@ -220,6 +220,7 @@ namespace ExtensionNet.Tests
         [Fact]
         public void NullExceptionTest()
         {
+            AssertThat(() => StreamExtensions.Write(stream, (byte[])null)).ThrowsExactlyException<ArgumentNullException>();
             AssertThat(() => stream.Write((sbyte[])null)).ThrowsExactlyException<ArgumentNullException>();
             AssertThat(() => stream.Write((ushort[])null)).ThrowsExactlyException<ArgumentNullException>();
             AssertThat(() => stream.Write((short[])null)).ThrowsExactlyException<ArgumentNullException>();
@@ -234,6 +235,7 @@ namespace ExtensionNet.Tests
             AssertThat(() => stream.Write((string)null)).ThrowsExactlyException<ArgumentNullException>();
 
             Stream stream2 = null;
+            AssertThat(() => StreamExtensions.Write(stream2, new byte[] { 0 })).ThrowsExactlyException<ArgumentNullException>();
             AssertThat(() => stream2.Write(new sbyte[] { 0 })).ThrowsExactlyException<ArgumentNullException>();
             AssertThat(() => stream2.Write(new ushort[] { 0 })).ThrowsExactlyException<ArgumentNullException>();
             AssertThat(() => stream2.Write(new short[] { 0 })).ThrowsExactlyException<ArgumentNullException>();
@@ -247,6 +249,7 @@ namespace ExtensionNet.Tests
             AssertThat(() => stream2.Write(new double[] { 0 })).ThrowsExactlyException<ArgumentNullException>();
             AssertThat(() => stream2.Write(string.Empty)).ThrowsExactlyException<ArgumentNullException>();
 
+            AssertThat(() => stream2.Write((byte)0)).ThrowsExactlyException<ArgumentNullException>();
             AssertThat(() => stream2.Write((sbyte)0)).ThrowsExactlyException<ArgumentNullException>();
             AssertThat(() => stream2.Write((ushort)0)).ThrowsExactlyException<ArgumentNullException>();
             AssertThat(() => stream2.Write((short)0)).ThrowsExactlyException<ArgumentNullException>();

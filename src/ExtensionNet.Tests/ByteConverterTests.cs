@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 using Xunit;
 
 using static AssertNet.Assertions;
@@ -105,9 +106,15 @@ namespace ExtensionNet.Tests
         public static void BigIntegerTest()
         {
             BigInteger value = new BigInteger(int.MaxValue) * new BigInteger(int.MaxValue);
+            AssertThat(value.GetBytes(Endianness.BigEndian).ToBigInteger(Endianness.BigEndian)).IsEqualTo(value);
+            AssertThat(value.GetBytes(Endianness.LittleEndian).ToBigInteger(Endianness.LittleEndian)).IsEqualTo(value);
+            AssertThat(value.GetBytes().ToBigInteger()).IsEqualTo(value);
             AssertThat(value.GetBytes(2048, Endianness.BigEndian).ToBigInteger(Endianness.BigEndian)).IsEqualTo(value);
             AssertThat(value.GetBytes(2048, Endianness.LittleEndian).ToBigInteger(Endianness.LittleEndian)).IsEqualTo(value);
             AssertThat(value.GetBytes(2048).ToBigInteger()).IsEqualTo(value);
+
+            AssertThat(() => value.GetBytes(-1)).ThrowsExactlyException<ArgumentException>();
+            AssertThat(() => new BigInteger(-1).GetBytes(2048)).ThrowsExactlyException<ArgumentException>();
         }
     }
 }
