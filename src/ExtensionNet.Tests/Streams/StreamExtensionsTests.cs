@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Numerics;
 using ExtensionNet.Streams;
 using ExtensionNet.Types;
 using Xunit;
@@ -148,6 +149,19 @@ namespace ExtensionNet.Tests.Streams
             stream.Position = 0;
             AssertThat(stream.ReadInt64()).IsEqualTo(-9);
             AssertThat(stream.ReadInt64(2)).ContainsExactly(432, -56);
+        }
+
+        /// <summary>
+        /// Checks that the method returns the right value.
+        /// </summary>
+        [Fact]
+        public void ReadBigIntegerTest()
+        {
+            BigInteger[] values = new BigInteger[] { 9, 432, 56 };
+            stream.Write(values, 64);
+            stream.Position = 0;
+            AssertThat(stream.ReadBigInteger(64)).IsEqualTo(new BigInteger(9));
+            AssertThat(stream.ReadBigInteger(64, 2)).ContainsExactly(new BigInteger(432), new BigInteger(56));
         }
 
         /// <summary>

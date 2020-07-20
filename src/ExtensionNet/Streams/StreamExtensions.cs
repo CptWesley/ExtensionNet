@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Numerics;
 using ExtensionNet.Types;
 
 namespace ExtensionNet.Streams
@@ -272,6 +273,35 @@ namespace ExtensionNet.Streams
         }
 
         /// <summary>
+        /// Reads a big integer from the stream.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <param name="size">The size of the big integer in number of bytes.</param>
+        /// <param name="endianness">The endianness.</param>
+        /// <returns>A big integer read from stream.</returns>
+        public static BigInteger ReadBigInteger(this Stream stream, int size, Endianness endianness = Endianness.Current)
+            => new BigInteger(stream.ReadUInt8(size).SetEndianness(endianness));
+
+        /// <summary>
+        /// Reads multiple big integers from the stream.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <param name="size">The size of the big integers in number of bytes.</param>
+        /// <param name="count">The number of big integers to read.</param>
+        /// <param name="endianness">The endianness.</param>
+        /// <returns>A big integer read from stream.</returns>
+        public static BigInteger[] ReadBigInteger(this Stream stream, int size, int count, Endianness endianness = Endianness.Current)
+        {
+            BigInteger[] result = new BigInteger[count];
+            for (int i = 0; i < count; i++)
+            {
+                result[i] = stream.ReadBigInteger(size, endianness);
+            }
+
+            return result;
+        }
+
+        /// <summary>
         /// Writes a string to the stream.
         /// </summary>
         /// <param name="stream">The stream to write to.</param>
@@ -496,6 +526,96 @@ namespace ExtensionNet.Streams
             {
                 stream.Write(value, endianness);
             }
+        }
+
+        /// <summary>
+        /// Writes a big integer to the stream.
+        /// </summary>
+        /// <param name="stream">The stream to write to.</param>
+        /// <param name="value">Big integer to write to the stream.</param>
+        /// <param name="size">The number of bytes the big integer should take.</param>
+        /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
+        public static void Write(this Stream stream, BigInteger value, int size, Endianness endianness = Endianness.Current)
+        {
+            if (value < 0)
+            {
+                throw new ArgumentException($"Writing and reading negative values such as the given '{value}' is currently not supported.", nameof(value));
+            }
+
+            byte[] bytes = value.ToByteArray();
+            int filler = size - bytes.Length;
+
+            if (filler < 0)
+            {
+                throw new ArgumentException($"The given size ({size}) can't be smaller than the number of bytes required to represent the value ({bytes.Length}).", nameof(size));
+            }
+
+            stream.Write(PadBytes(bytes, filler, endianness));
+        }
+
+        /// <summary>
+        /// Writes a big integer to the stream.
+        /// </summary>
+        /// <param name="stream">The stream to write to.</param>
+        /// <param name="value">Big integer to write to the stream.</param>
+        /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
+        public static void Write(this Stream stream, BigInteger value, Endianness endianness = Endianness.Current)
+            => stream.Write(PadBytes(value.ToByteArray(), 0, endianness));
+
+        /// <summary>
+        /// Writes multiple big integers to the stream.
+        /// </summary>
+        /// <param name="stream">The stream to write to.</param>
+        /// <param name="values">Big integers to write to the stream.</param>
+        /// <param name="size">The number of bytes a big integer should take.</param>
+        /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
+        public static void Write(this Stream stream, BigInteger[] values, int size, Endianness endianness = Endianness.Current)
+        {
+            if (values is null)
+            {
+                throw new ArgumentNullException(nameof(values));
+            }
+
+            foreach (BigInteger value in values)
+            {
+                stream.Write(value, size, endianness);
+            }
+        }
+
+        /// <summary>
+        /// Writes multiple big integers to the stream.
+        /// </summary>
+        /// <param name="stream">The stream to write to.</param>
+        /// <param name="values">Big integers to write to the stream.</param>
+        /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
+        public static void Write(this Stream stream, BigInteger[] values, Endianness endianness = Endianness.Current)
+        {
+            if (values is null)
+            {
+                throw new ArgumentNullException(nameof(values));
+            }
+
+            foreach (BigInteger value in values)
+            {
+                stream.Write(value, endianness);
+            }
+        }
+
+        private static byte[] PadBytes(byte[] bytes, int filler, Endianness endianness)
+        {
+            byte[] result = new byte[bytes.Length + filler];
+
+            if (endianness == Endianness.LittleEndian || (endianness == Endianness.Current && BitConverter.IsLittleEndian))
+            {
+                Array.Copy(bytes, 0, result, 0, bytes.Length);
+            }
+            else
+            {
+                Array.Reverse(bytes);
+                Array.Copy(bytes, 0, result, filler, bytes.Length);
+            }
+
+            return result;
         }
 
         private static byte[] SetEndianness(this byte[] bytes, Endianness endianness)
