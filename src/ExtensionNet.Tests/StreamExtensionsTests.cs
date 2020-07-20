@@ -215,6 +215,66 @@ namespace ExtensionNet.Tests
         }
 
         /// <summary>
+        /// Checks that all exceptions are correctly thrown.
+        /// </summary>
+        [Fact]
+        public void NullExceptionTest()
+        {
+            AssertThat(() => stream.Write((sbyte[])null)).ThrowsExactlyException<ArgumentNullException>();
+            AssertThat(() => stream.Write((ushort[])null)).ThrowsExactlyException<ArgumentNullException>();
+            AssertThat(() => stream.Write((short[])null)).ThrowsExactlyException<ArgumentNullException>();
+            AssertThat(() => stream.Write((char[])null)).ThrowsExactlyException<ArgumentNullException>();
+            AssertThat(() => stream.Write((uint[])null)).ThrowsExactlyException<ArgumentNullException>();
+            AssertThat(() => stream.Write((int[])null)).ThrowsExactlyException<ArgumentNullException>();
+            AssertThat(() => stream.Write((long[])null)).ThrowsExactlyException<ArgumentNullException>();
+            AssertThat(() => stream.Write((ulong[])null)).ThrowsExactlyException<ArgumentNullException>();
+            AssertThat(() => stream.Write(null, 64)).ThrowsExactlyException<ArgumentNullException>();
+            AssertThat(() => stream.Write((float[])null)).ThrowsExactlyException<ArgumentNullException>();
+            AssertThat(() => stream.Write((double[])null)).ThrowsExactlyException<ArgumentNullException>();
+            AssertThat(() => stream.Write((string)null)).ThrowsExactlyException<ArgumentNullException>();
+
+            Stream stream2 = null;
+            AssertThat(() => stream2.Write(new sbyte[] { 0 })).ThrowsExactlyException<ArgumentNullException>();
+            AssertThat(() => stream2.Write(new ushort[] { 0 })).ThrowsExactlyException<ArgumentNullException>();
+            AssertThat(() => stream2.Write(new short[] { 0 })).ThrowsExactlyException<ArgumentNullException>();
+            AssertThat(() => stream2.Write(new char[] { 'a' })).ThrowsExactlyException<ArgumentNullException>();
+            AssertThat(() => stream2.Write(new uint[] { 0 })).ThrowsExactlyException<ArgumentNullException>();
+            AssertThat(() => stream2.Write(new int[] { 0 })).ThrowsExactlyException<ArgumentNullException>();
+            AssertThat(() => stream2.Write(new long[] { 0 })).ThrowsExactlyException<ArgumentNullException>();
+            AssertThat(() => stream2.Write(new ulong[] { 0 })).ThrowsExactlyException<ArgumentNullException>();
+            AssertThat(() => stream2.Write(new BigInteger[] { new BigInteger(0) }, 64)).ThrowsExactlyException<ArgumentNullException>();
+            AssertThat(() => stream2.Write(new float[] { 0 })).ThrowsExactlyException<ArgumentNullException>();
+            AssertThat(() => stream2.Write(new double[] { 0 })).ThrowsExactlyException<ArgumentNullException>();
+            AssertThat(() => stream2.Write(string.Empty)).ThrowsExactlyException<ArgumentNullException>();
+
+            AssertThat(() => stream2.Write((sbyte)0)).ThrowsExactlyException<ArgumentNullException>();
+            AssertThat(() => stream2.Write((ushort)0)).ThrowsExactlyException<ArgumentNullException>();
+            AssertThat(() => stream2.Write((short)0)).ThrowsExactlyException<ArgumentNullException>();
+            AssertThat(() => stream2.Write((char)0)).ThrowsExactlyException<ArgumentNullException>();
+            AssertThat(() => stream2.Write(0u)).ThrowsExactlyException<ArgumentNullException>();
+            AssertThat(() => stream2.Write(0)).ThrowsExactlyException<ArgumentNullException>();
+            AssertThat(() => stream2.Write(0L)).ThrowsExactlyException<ArgumentNullException>();
+            AssertThat(() => stream2.Write(0UL)).ThrowsExactlyException<ArgumentNullException>();
+            AssertThat(() => stream2.Write(new BigInteger(0), 64)).ThrowsExactlyException<ArgumentNullException>();
+            AssertThat(() => stream2.Write(0f)).ThrowsExactlyException<ArgumentNullException>();
+            AssertThat(() => stream2.Write(0d)).ThrowsExactlyException<ArgumentNullException>();
+
+            AssertThat(() => stream2.ReadUInt8()).ThrowsExactlyException<ArgumentNullException>();
+            AssertThat(() => stream2.ReadInt8()).ThrowsExactlyException<ArgumentNullException>();
+            AssertThat(() => stream2.ReadUInt16()).ThrowsExactlyException<ArgumentNullException>();
+            AssertThat(() => stream2.ReadInt16()).ThrowsExactlyException<ArgumentNullException>();
+            AssertThat(() => stream2.ReadUInt32()).ThrowsExactlyException<ArgumentNullException>();
+            AssertThat(() => stream2.ReadInt32()).ThrowsExactlyException<ArgumentNullException>();
+            AssertThat(() => stream2.ReadUInt64()).ThrowsExactlyException<ArgumentNullException>();
+            AssertThat(() => stream2.ReadInt64()).ThrowsExactlyException<ArgumentNullException>();
+            AssertThat(() => stream2.ReadFloat32()).ThrowsExactlyException<ArgumentNullException>();
+            AssertThat(() => stream2.ReadFloat64()).ThrowsExactlyException<ArgumentNullException>();
+            AssertThat(() => stream2.ReadBigInteger(64)).ThrowsExactlyException<ArgumentNullException>();
+            AssertThat(() => stream2.ReadChar()).ThrowsExactlyException<ArgumentNullException>();
+            AssertThat(() => stream2.ReadString(64)).ThrowsExactlyException<ArgumentNullException>();
+        }
+
+        /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
         public void Dispose()

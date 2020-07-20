@@ -532,6 +532,11 @@ namespace ExtensionNet
         /// <param name="values">Chars to write to the stream.</param>
         public static void Write(this Stream stream, char[] values)
         {
+            if (stream is null)
+            {
+                throw new ArgumentNullException(nameof(stream));
+            }
+
             if (values is null)
             {
                 throw new ArgumentNullException(nameof(values));
@@ -593,6 +598,11 @@ namespace ExtensionNet
         /// <param name="values">Signed bytes to write to the stream.</param>
         public static void Write(this Stream stream, sbyte[] values)
         {
+            if (stream is null)
+            {
+                throw new ArgumentNullException(nameof(stream));
+            }
+
             if (values is null)
             {
                 throw new ArgumentNullException(nameof(values));
@@ -629,6 +639,11 @@ namespace ExtensionNet
         /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
         public static void Write(this Stream stream, ushort[] values, Endianness endianness)
         {
+            if (stream is null)
+            {
+                throw new ArgumentNullException(nameof(stream));
+            }
+
             if (values is null)
             {
                 throw new ArgumentNullException(nameof(values));
@@ -673,6 +688,11 @@ namespace ExtensionNet
         /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
         public static void Write(this Stream stream, short[] values, Endianness endianness)
         {
+            if (stream is null)
+            {
+                throw new ArgumentNullException(nameof(stream));
+            }
+
             if (values is null)
             {
                 throw new ArgumentNullException(nameof(values));
@@ -717,6 +737,11 @@ namespace ExtensionNet
         /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
         public static void Write(this Stream stream, uint[] values, Endianness endianness)
         {
+            if (stream is null)
+            {
+                throw new ArgumentNullException(nameof(stream));
+            }
+
             if (values is null)
             {
                 throw new ArgumentNullException(nameof(values));
@@ -761,6 +786,11 @@ namespace ExtensionNet
         /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
         public static void Write(this Stream stream, int[] values, Endianness endianness)
         {
+            if (stream is null)
+            {
+                throw new ArgumentNullException(nameof(stream));
+            }
+
             if (values is null)
             {
                 throw new ArgumentNullException(nameof(values));
@@ -805,6 +835,11 @@ namespace ExtensionNet
         /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
         public static void Write(this Stream stream, ulong[] values, Endianness endianness)
         {
+            if (stream is null)
+            {
+                throw new ArgumentNullException(nameof(stream));
+            }
+
             if (values is null)
             {
                 throw new ArgumentNullException(nameof(values));
@@ -849,6 +884,11 @@ namespace ExtensionNet
         /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
         public static void Write(this Stream stream, long[] values, Endianness endianness)
         {
+            if (stream is null)
+            {
+                throw new ArgumentNullException(nameof(stream));
+            }
+
             if (values is null)
             {
                 throw new ArgumentNullException(nameof(values));
@@ -896,6 +936,11 @@ namespace ExtensionNet
         /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
         public static void Write(this Stream stream, BigInteger[] values, int size, Endianness endianness)
         {
+            if (stream is null)
+            {
+                throw new ArgumentNullException(nameof(stream));
+            }
+
             if (values is null)
             {
                 throw new ArgumentNullException(nameof(values));
@@ -941,6 +986,11 @@ namespace ExtensionNet
         /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
         public static void Write(this Stream stream, float[] values, Endianness endianness)
         {
+            if (stream is null)
+            {
+                throw new ArgumentNullException(nameof(stream));
+            }
+
             if (values is null)
             {
                 throw new ArgumentNullException(nameof(values));
@@ -985,6 +1035,11 @@ namespace ExtensionNet
         /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
         public static void Write(this Stream stream, double[] values, Endianness endianness)
         {
+            if (stream is null)
+            {
+                throw new ArgumentNullException(nameof(stream));
+            }
+
             if (values is null)
             {
                 throw new ArgumentNullException(nameof(values));
