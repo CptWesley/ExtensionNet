@@ -17,10 +17,5 @@ namespace ExtensionNet
         /// Indicates big endian interpretation.
         /// </summary>
         BigEndian,
-
-        /// <summary>
-        /// Indicates that the endianness of the current platform should be used.
-        /// </summary>
-        Current,
     }
 }

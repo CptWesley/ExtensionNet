@@ -5,9 +5,9 @@ using static AssertNet.Assertions;
 namespace ExtensionNet.Tests
 {
     /// <summary>
-    /// Test class for the <see cref="NumericExtensions"/> class.
+    /// Test class for the <see cref="ByteConverter"/> class.
     /// </summary>
-    public static class NumericExtensionsTests
+    public static class ByteConverterTests
     {
         /// <summary>
         /// Checks that the ToBytes method functions correctly.
