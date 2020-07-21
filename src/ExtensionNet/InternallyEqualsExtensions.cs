@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace ExtensionNet.Reflective
+namespace ExtensionNet
 {
     /// <summary>
     /// Static extension class which adds an internal equals method to every object.
@@ -30,9 +30,14 @@ namespace ExtensionNet.Reflective
 
         private static bool InternallyEquals(this object that, object other, bool deep, Dictionary<ReferenceWrapper, HashSet<ReferenceWrapper>> comparisons)
         {
-            if (that == null)
+            if (that is null)
             {
-                return that == other;
+                return other is null;
+            }
+
+            if (other is null)
+            {
+                return false;
             }
 
             Type type = that.GetType();
@@ -77,7 +82,7 @@ namespace ExtensionNet.Reflective
             {
                 object thatCur = that.GetValue(i);
                 object otherCur = other.GetValue(i);
-                if (thatCur == null && otherCur == null)
+                if (thatCur is null && otherCur is null)
                 {
                     continue;
                 }

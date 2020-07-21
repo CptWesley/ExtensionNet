@@ -1,15 +1,23 @@
 ﻿using System;
-using ExtensionNet.Reflective;
 using Xunit;
-using static AssertNet.Xunit.Assertions;
+using static AssertNet.Assertions;
 
-namespace ExtensionNet.Tests.Reflective
+namespace ExtensionNet.Tests
 {
     /// <summary>
     /// Test class for the <see cref="InternalHashCodeExtensionsTests"/> class.
     /// </summary>
     public static class InternalHashCodeExtensionsTests
     {
+        /// <summary>
+        /// Checks that integers return the right hashcode.
+        /// </summary>
+        [Fact]
+        public static void NullTest()
+        {
+            AssertThat(((object)null).GetInternalHashCode(true)).IsEqualTo(0);
+        }
+
         /// <summary>
         /// Checks that integers return the right hashcode.
         /// </summary>
@@ -58,6 +66,28 @@ namespace ExtensionNet.Tests.Reflective
             AssertThat(a.GetInternalHashCode(false)).IsEqualTo(c.GetInternalHashCode(false));
             c.Reference = a;
             AssertThat(a.GetInternalHashCode(false)).IsNotEqualTo(c.GetInternalHashCode(false));
+        }
+
+        /// <summary>
+        /// Checks that deep hashcodes are correct.
+        /// </summary>
+        [Fact]
+        public static void CircularDeepTest()
+        {
+            DummyClasses.CircularClass a = new DummyClasses.CircularClass();
+            DummyClasses.CircularClass b = new DummyClasses.CircularClass();
+            a.Reference = b;
+            b.Reference = a;
+
+            DummyClasses.CircularClass c = a.Copy(true);
+
+            AssertThat(a.GetInternalHashCode(true)).IsEqualTo(c.GetInternalHashCode(true));
+            c.Reference = a;
+            AssertThat(a.GetInternalHashCode(true)).IsNotEqualTo(c.GetInternalHashCode(true));
+
+            a.Reference = null;
+            c.Reference = null;
+            AssertThat(a.GetInternalHashCode(true)).IsEqualTo(c.GetInternalHashCode(true));
         }
 
         /// <summary>

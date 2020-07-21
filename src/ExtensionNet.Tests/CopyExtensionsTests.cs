@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Text;
-using ExtensionNet.Reflective;
 using Xunit;
 
-using static AssertNet.Xunit.Assertions;
+using static AssertNet.Assertions;
 
-namespace ExtensionNet.Tests.Reflective
+namespace ExtensionNet.Tests
 {
     /// <summary>
     /// Test class for the <see cref="CopyExtensions"/> class.
@@ -85,8 +84,10 @@ namespace ExtensionNet.Tests.Reflective
         [Fact]
         public static void InheritanceTest()
         {
-            DummyClasses.SonClass son = new DummyClasses.SonClass();
-            son.PublicValue = 42;
+            DummyClasses.SonClass son = new DummyClasses.SonClass
+            {
+                PublicValue = 42,
+            };
             son.SetPrivateValue(1337);
             son.SonValue = 50;
             DummyClasses.SonClass copy = son.Copy(true);
@@ -105,7 +106,7 @@ namespace ExtensionNet.Tests.Reflective
             DummyClasses.SomeStruct a = new DummyClasses.SomeStruct()
             {
                 Value = 42,
-                Random = rnd
+                Random = rnd,
             };
 
             DummyClasses.SomeStruct b = a.Copy(false);
@@ -124,7 +125,7 @@ namespace ExtensionNet.Tests.Reflective
             DummyClasses.SomeStruct a = new DummyClasses.SomeStruct()
             {
                 Value = 42,
-                Random = rnd
+                Random = rnd,
             };
 
             DummyClasses.SomeStruct b = a.Copy(true);

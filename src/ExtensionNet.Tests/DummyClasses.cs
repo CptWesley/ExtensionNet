@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using ExtensionNet.Reflective;
 
-namespace ExtensionNet.Tests.Reflective
+namespace ExtensionNet.Tests
 {
     /// <summary>
     /// Dummy class holder for testing purposes.

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ExtensionNet.Endian
+namespace ExtensionNet
 {
     /// <summary>
     /// Class containing extension methods relating to endianness of numbers.
@@ -77,6 +77,22 @@ namespace ExtensionNet.Endian
             byte[] bytes = BitConverter.GetBytes(value);
             Array.Reverse(bytes);
             return BitConverter.ToUInt64(bytes, 0);
+        }
+
+        /// <summary>
+        /// Reorders the order of bytes if the given endianness does not match the endianness of the current system.
+        /// </summary>
+        /// <param name="bytes">The bytes.</param>
+        /// <param name="endianness">The given endianness.</param>
+        /// <returns>The bytes in the desired order.</returns>
+        public static byte[] SetEndianness(this byte[] bytes, Endianness endianness)
+        {
+            if ((BitConverter.IsLittleEndian && endianness == Endianness.BigEndian) || (!BitConverter.IsLittleEndian && endianness == Endianness.LittleEndian))
+            {
+                Array.Reverse(bytes);
+            }
+
+            return bytes;
         }
     }
 }

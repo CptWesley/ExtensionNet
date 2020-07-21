@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 
-namespace ExtensionNet.Types
+namespace ExtensionNet
 {
     /// <summary>
     /// Enum to indicate endianness.
@@ -17,10 +17,5 @@ namespace ExtensionNet.Types
         /// Indicates big endian interpretation.
         /// </summary>
         BigEndian,
-
-        /// <summary>
-        /// Indicates that the endianness of the current platform should be used.
-        /// </summary>
-        Current
     }
 }
