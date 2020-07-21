@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Numerics;
+using System.Text;
 
 namespace ExtensionNet
 {
@@ -40,16 +41,49 @@ namespace ExtensionNet
         /// <param name="stream">The stream to read from.</param>
         /// <returns>First char on the stream.</returns>
         public static string ReadString(this Stream stream)
-            => stream.ReadString(1);
+            => stream.ReadString(Encoding.Default);
+
+        /// <summary>
+        /// Reads a single char from the stream.
+        /// </summary>
+        /// <param name="stream">The stream to read from.</param>
+        /// <param name="encoding">The encoding of the string.</param>
+        /// <returns>First char on the stream.</returns>
+        public static string ReadString(this Stream stream, Encoding encoding)
+        {
+            if (encoding is null)
+            {
+                throw new ArgumentNullException(nameof(encoding));
+            }
+
+            return encoding.GetString(stream.ReadAllBytes());
+        }
 
         /// <summary>
         /// Reads a string from stream.
         /// </summary>
         /// <param name="stream">The stream to read from.</param>
-        /// <param name="count">The amount of chars.</param>
+        /// <param name="size">The amount of chars.</param>
         /// <returns>A string read from stream.</returns>
-        public static string ReadString(this Stream stream, int count)
-            => new string(stream.ReadChar(count));
+        public static string ReadString(this Stream stream, int size)
+            => stream.ReadString(size, Encoding.Default);
+
+        /// <summary>
+        /// Reads a string from stream.
+        /// </summary>
+        /// <param name="stream">The stream to read from.</param>
+        /// <param name="size">The amount of chars.</param>
+        /// <param name="encoding">The encoding of the string.</param>
+        /// <returns>A string read from stream.</returns>
+        public static string ReadString(this Stream stream, int size, Encoding encoding)
+        {
+            if (encoding is null)
+            {
+                throw new ArgumentNullException(nameof(encoding));
+            }
+
+            return encoding.GetString(stream.ReadUInt8(size));
+        }
 
         /// <summary>
         /// Reads a single byte from the stream.
@@ -515,7 +549,28 @@ namespace ExtensionNet
         /// <param name="stream">The stream to write to.</param>
         /// <param name="value">String to write to stream.</param>
         public static void Write(this Stream stream, string value)
-            => stream.Write(value?.ToCharArray());
+            => stream.Write(value, Encoding.Default);
+
+        /// <summary>
+        /// Writes a string to the stream.
+        /// </summary>
+        /// <param name="stream">The stream to write to.</param>
+        /// <param name="value">String to write to stream.</param>
+        /// <param name="encoding">The encoding of the string.</param>
+        public static void Write(this Stream stream, string value, Encoding encoding)
+        {
+            if (value is null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+
+            if (encoding is null)
+            {
+                throw new ArgumentNullException(nameof(encoding));
+            }
+
+            stream.Write(encoding.GetBytes(value));
+        }
 
         /// <summary>
         /// Writes a char to the stream.
@@ -1058,5 +1113,32 @@ namespace ExtensionNet
         /// <param name="values">Signed longs to write to the stream.</param>
         public static void Write(this Stream stream, double[] values)
             => stream.Write(values, ByteConverter.Endianness);
+
+        /// <summary>
+        /// Reads the remaining bytes of the stream.
+        /// </summary>
+        /// <param name="stream">The stream to read.</param>
+        /// <returns>The remaining bytes of the stream.</returns>
+        public static byte[] ReadAllBytes(this Stream stream)
+        {
+            if (stream is null)
+            {
+                throw new ArgumentNullException(nameof(stream));
+            }
+
+            using (MemoryStream ms = new MemoryStream())
+            {
+                stream.CopyTo(ms);
+                return ms.ToArray();
+            }
+        }
+
+        /// <summary>
+        /// Converts a byte array to a stream.
+        /// </summary>
+        /// <param name="bytes">The bytes contained in the stream.</param>
+        /// <returns>The newly created stream.</returns>
+        public static Stream ToStream(this byte[] bytes)
+            => new MemoryStream(bytes);
     }
 }

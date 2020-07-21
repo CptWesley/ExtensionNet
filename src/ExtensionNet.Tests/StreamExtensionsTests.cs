@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Numerics;
+using System.Text;
 using Xunit;
 
 using static AssertNet.Assertions;
@@ -42,8 +44,8 @@ namespace ExtensionNet.Tests
         {
             stream.Write("hello world");
             stream.Position = 0;
-            AssertThat(stream.ReadString()).IsEqualTo("h");
-            AssertThat(stream.ReadString(4)).IsEqualTo("ello");
+            AssertThat(stream.ReadString(4)).IsEqualTo("hell");
+            AssertThat(stream.ReadString()).IsEqualTo("o world");
         }
 
         /// <summary>
@@ -234,6 +236,10 @@ namespace ExtensionNet.Tests
             AssertThat(() => stream.Write((double[])null)).ThrowsExactlyException<ArgumentNullException>();
             AssertThat(() => stream.Write((string)null)).ThrowsExactlyException<ArgumentNullException>();
 
+            AssertThat(() => stream.ReadString(null)).ThrowsExactlyException<ArgumentNullException>();
+            AssertThat(() => stream.ReadString(64, null)).ThrowsExactlyException<ArgumentNullException>();
+            AssertThat(() => stream.Write(string.Empty, null)).ThrowsExactlyException<ArgumentNullException>();
+
             Stream stream2 = null;
             AssertThat(() => StreamExtensions.Write(stream2, new byte[] { 0 })).ThrowsExactlyException<ArgumentNullException>();
             AssertThat(() => stream2.Write(new sbyte[] { 0 })).ThrowsExactlyException<ArgumentNullException>();
@@ -275,6 +281,21 @@ namespace ExtensionNet.Tests
             AssertThat(() => stream2.ReadBigInteger(64)).ThrowsExactlyException<ArgumentNullException>();
             AssertThat(() => stream2.ReadChar()).ThrowsExactlyException<ArgumentNullException>();
             AssertThat(() => stream2.ReadString(64)).ThrowsExactlyException<ArgumentNullException>();
+            AssertThat(() => stream2.ReadString()).ThrowsExactlyException<ArgumentNullException>();
+        }
+
+        /// <summary>
+        /// Checks that converting things to streams works correctly.
+        /// </summary>
+        [Fact]
+        public void ToStreamTest()
+        {
+            byte[] values = new byte[] { 43, 24, 255, 0, 2 };
+            using (Stream stream = values.ToStream())
+            {
+                AssertThat(stream.ReadUInt8()).IsEqualTo(43);
+                AssertThat(stream.ReadAllBytes()).ContainsExactly(values.Skip(1));
+            }
         }
 
         /// <summary>
