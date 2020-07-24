@@ -87,12 +87,13 @@ namespace ExtensionNet
         /// <returns>The bytes in the desired order.</returns>
         public static byte[] SetEndianness(this byte[] bytes, Endianness endianness)
         {
+            byte[] copy = bytes.Copy();
             if ((BitConverter.IsLittleEndian && endianness == Endianness.BigEndian) || (!BitConverter.IsLittleEndian && endianness == Endianness.LittleEndian))
             {
-                Array.Reverse(bytes);
+                Array.Reverse(copy);
             }
 
-            return bytes;
+            return copy;
         }
     }
 }

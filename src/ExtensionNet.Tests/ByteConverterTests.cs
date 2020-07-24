@@ -116,5 +116,25 @@ namespace ExtensionNet.Tests
             AssertThat(() => value.GetBytes(-1)).ThrowsExactlyException<ArgumentException>();
             AssertThat(() => new BigInteger(-1).GetBytes(2048)).ThrowsExactlyException<ArgumentException>();
         }
+
+        /// <summary>
+        /// Checks that there are no side effects.
+        /// </summary>
+        [Fact]
+        public static void SideEffectTest()
+        {
+            Random rnd = new Random();
+            byte[] bytes = new byte[8];
+            rnd.NextBytes(bytes);
+
+            ulong v1 = bytes.ToUInt64(Endianness.BigEndian);
+            ulong v2 = bytes.ToUInt64(Endianness.BigEndian);
+
+            ulong v3 = bytes.ToUInt64(Endianness.LittleEndian);
+            ulong v4 = bytes.ToUInt64(Endianness.LittleEndian);
+
+            AssertThat(v1).IsEqualTo(v2);
+            AssertThat(v3).IsEqualTo(v4);
+        }
     }
 }

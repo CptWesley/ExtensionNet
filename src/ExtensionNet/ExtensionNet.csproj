@@ -8,7 +8,7 @@
     <PackageLicenseUrl>https://github.com/CptWesley/ExtensionNet/blob/master/LICENSE</PackageLicenseUrl>
     <Description>Adds general use extension methods to C# classes.</Description>
     <PackageTags>object extension deep shallow copy streams</PackageTags>
-    <Version>0.1.5.1</Version>
+    <Version>0.1.5.2</Version>
     <AssemblyVersion>$(Version)</AssemblyVersion>
     <FileVersion>$(Version)</FileVersion>
     <DocumentationFile>bin\$(AssemblyName).xml</DocumentationFile>
