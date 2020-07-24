@@ -93,7 +93,7 @@ namespace ExtensionNet
                 Array.Reverse(copy);
             }
 
-            return bytes;
+            return copy;
         }
     }
 }
