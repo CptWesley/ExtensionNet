@@ -291,11 +291,9 @@ namespace ExtensionNet.Tests
         public void ToStreamTest()
         {
             byte[] values = new byte[] { 43, 24, 255, 0, 2 };
-            using (Stream stream = values.ToStream())
-            {
-                AssertThat(stream.ReadUInt8()).IsEqualTo(43);
-                AssertThat(stream.ReadAllBytes()).ContainsExactly(values.Skip(1));
-            }
+            using Stream stream = values.ToStream();
+            AssertThat(stream.ReadUInt8()).IsEqualTo(43);
+            AssertThat(stream.ReadAllBytes()).ContainsExactly(values.Skip(1));
         }
 
         /// <summary>
