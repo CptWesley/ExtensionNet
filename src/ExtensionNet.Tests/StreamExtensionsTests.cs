@@ -325,6 +325,88 @@ namespace ExtensionNet.Tests
         }
 
         /// <summary>
+        /// Checks that reading an entire stream to a byte array works correctly when the buffer is bigger.
+        /// </summary>
+        [Fact]
+        public void ReadFullTest()
+        {
+            byte[] values = new byte[] { 43, 24, 255, 0, 2 };
+            using Stream stream = values.ToStream();
+            AssertThat(stream.ReadUInt8()).IsEqualTo(43);
+            AssertThat(stream.Read()).ContainsExactly(values.Skip(1));
+        }
+
+        /// <summary>
+        /// Checks that reading an entire stream to a byte array works correctly when the buffer is smaller.
+        /// </summary>
+        [Fact]
+        public void ReadPartialTest()
+        {
+            byte[] values = new byte[] { 43, 24, 255, 0, 2 };
+            using Stream stream = values.ToStream();
+            AssertThat(stream.ReadUInt8()).IsEqualTo(43);
+            AssertThat(stream.Read(2)).ContainsExactly(values.Skip(1));
+        }
+
+        /// <summary>
+        /// Checks that reading an entire stream to a byte array works correctly when the buffer is bigger.
+        /// </summary>
+        [Fact]
+        public void ReadAsyncFullTest()
+        {
+            byte[] values = new byte[] { 43, 24, 255, 0, 2 };
+            using Stream stream = values.ToStream();
+            AssertThat(stream.ReadUInt8()).IsEqualTo(43);
+            AssertThat(stream.ReadAsync().Result).ContainsExactly(values.Skip(1));
+        }
+
+        /// <summary>
+        /// Checks that reading an entire stream to a byte array works correctly when the buffer is smaller.
+        /// </summary>
+        [Fact]
+        public void ReadAsyncPartialTest()
+        {
+            byte[] values = new byte[] { 43, 24, 255, 0, 2 };
+            using Stream stream = values.ToStream();
+            AssertThat(stream.ReadUInt8()).IsEqualTo(43);
+            AssertThat(stream.ReadAsync(2).Result).ContainsExactly(values.Skip(1));
+        }
+
+        /// <summary>
+        /// Checks that reading an entire stream to a byte array asynchronously works correctly.
+        /// </summary>
+        [Fact]
+        public void ReadAsyncCancelledTest()
+        {
+            byte[] values = new byte[] { 43, 24, 255, 0, 2 };
+            using Stream stream = values.ToStream();
+            AssertThat(stream.ReadUInt8()).IsEqualTo(43);
+            using CancellationTokenSource cts = new CancellationTokenSource();
+            cts.Cancel();
+            AssertThat(() => stream.ReadAsync(cts.Token).Wait()).ThrowsExactlyException<AggregateException>().WithInnerException<TaskCanceledException>();
+        }
+
+        /// <summary>
+        /// Checks that we return from reading when the stream isn't open yet.
+        /// </summary>
+        [Fact]
+        public void IntermediateRead()
+        {
+            byte[] s1 = new byte[] { 1, 2, 3 };
+            byte[] s2 = new byte[] { 4, 5, 6 };
+            stream.Write(s1);
+            stream.Flush();
+            stream.Position = 0;
+            AssertThat(stream.Read()).ContainsExactly(s1);
+            stream.Write(s2);
+            stream.Flush();
+            stream.Position = 3;
+            AssertThat(stream.Read()).ContainsExactly(s2);
+            stream.Close();
+            AssertThat(stream.Read()).IsEmpty();
+        }
+
+        /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
         public void Dispose()

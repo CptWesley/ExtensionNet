@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Numerics;
 using System.Text;
@@ -12,6 +13,11 @@ namespace ExtensionNet
     /// </summary>
     public static class StreamExtensions
     {
+        /// <summary>
+        /// The default buffer size.
+        /// </summary>
+        public const int DefaultBufferSize = 2048;
+
         /// <summary>
         /// Reads a single char from the stream.
         /// </summary>
@@ -1159,7 +1165,7 @@ namespace ExtensionNet
             using (MemoryStream ms = new MemoryStream())
             {
                 Task ctTask = ct.Task();
-                Task finished = await Task.WhenAny(ctTask, stream.CopyToAsync(ms));
+                Task finished = await Task.WhenAny(ctTask, stream.CopyToAsync(ms)).ConfigureAwait(false);
                 if (finished == ctTask)
                 {
                     ct.ThrowIfCancellationRequested();
@@ -1176,5 +1182,98 @@ namespace ExtensionNet
         /// <returns>The newly created stream.</returns>
         public static Stream ToStream(this byte[] bytes)
             => new MemoryStream(bytes);
+
+        /// <summary>
+        /// Reads the currently available bytes from the stream.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <param name="bufferSize">The buffer size. Must be positive integer.</param>
+        /// <returns>The bytes currently available from the stream.</returns>
+        public static byte[] Read(this Stream stream, int bufferSize)
+        {
+            if (bufferSize <= 0)
+            {
+                throw new ArgumentException("Buffer size must be positive.", nameof(bufferSize));
+            }
+
+            List<byte> bytes = new List<byte>();
+            byte[] buffer = new byte[bufferSize];
+            int read = 0;
+            while (stream.CanRead && (read != 0 || bytes.Count == 0))
+            {
+                read = stream.Read(buffer, 0, buffer.Length);
+
+                for (int i = 0; i < read; i++)
+                {
+                    bytes.Add(buffer[i]);
+                }
+            }
+
+            return bytes.ToArray();
+        }
+
+        /// <summary>
+        /// Reads the currently available bytes from the stream.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <returns>The bytes currently available from the stream.</returns>
+        public static byte[] Read(this Stream stream)
+            => stream.Read(DefaultBufferSize);
+
+        /// <summary>
+        /// Reads the currently available bytes from the stream.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <param name="bufferSize">The buffer size. Must be positive integer.</param>
+        /// <param name="ct">The cancellation token.</param>
+        /// <returns>The bytes currently available from the stream.</returns>
+        public static async Task<byte[]> ReadAsync(this Stream stream, int bufferSize, CancellationToken ct)
+        {
+            if (bufferSize <= 0)
+            {
+                throw new ArgumentException("Buffer size must be positive.", nameof(bufferSize));
+            }
+
+            List<byte> bytes = new List<byte>();
+            byte[] buffer = new byte[bufferSize];
+            int read = 0;
+            while (stream.CanRead && (read != 0 || bytes.Count == 0))
+            {
+                read = await stream.ReadAsync(buffer, 0, buffer.Length, ct).ConfigureAwait(false);
+
+                for (int i = 0; i < read; i++)
+                {
+                    bytes.Add(buffer[i]);
+                }
+            }
+
+            return bytes.ToArray();
+        }
+
+        /// <summary>
+        /// Reads the currently available bytes from the stream.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <param name="ct">The cancellation token.</param>
+        /// <returns>The bytes currently available from the stream.</returns>
+        public static Task<byte[]> ReadAsync(this Stream stream, CancellationToken ct)
+            => stream.ReadAsync(DefaultBufferSize, ct);
+
+        /// <summary>
+        /// Reads the currently available bytes from the stream.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <param name="bufferSize">The size of the buffer to be used.</param>
+        /// <returns>The bytes currently available from the stream.</returns>
+        public static Task<byte[]> ReadAsync(this Stream stream, int bufferSize)
+            => stream.ReadAsync(bufferSize, CancellationToken.None);
+
+        /// <summary>
+        /// Reads the currently available bytes from the stream.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <returns>The bytes currently available from the stream.</returns>
+        public static Task<byte[]> ReadAsync(this Stream stream)
+            => stream.ReadAsync(DefaultBufferSize);
     }
 }
