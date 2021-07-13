@@ -3,6 +3,8 @@ using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 
 using static AssertNet.Assertions;
@@ -294,6 +296,32 @@ namespace ExtensionNet.Tests
             using Stream stream = values.ToStream();
             AssertThat(stream.ReadUInt8()).IsEqualTo(43);
             AssertThat(stream.ReadAllBytes()).ContainsExactly(values.Skip(1));
+        }
+
+        /// <summary>
+        /// Checks that reading an entire stream to a byte array asynchronously works correctly.
+        /// </summary>
+        [Fact]
+        public void ReadAllBytesAsyncTest()
+        {
+            byte[] values = new byte[] { 43, 24, 255, 0, 2 };
+            using Stream stream = values.ToStream();
+            AssertThat(stream.ReadUInt8()).IsEqualTo(43);
+            AssertThat(stream.ReadAllBytesAsync().Result).ContainsExactly(values.Skip(1));
+        }
+
+        /// <summary>
+        /// Checks that reading an entire stream to a byte array asynchronously works correctly.
+        /// </summary>
+        [Fact]
+        public void ReadAllBytesAsyncCancelledTest()
+        {
+            byte[] values = new byte[] { 43, 24, 255, 0, 2 };
+            using Stream stream = values.ToStream();
+            AssertThat(stream.ReadUInt8()).IsEqualTo(43);
+            using CancellationTokenSource cts = new CancellationTokenSource();
+            cts.Cancel();
+            AssertThat(() => stream.ReadAllBytesAsync(cts.Token).Wait()).ThrowsExactlyException<AggregateException>().WithInnerException<TaskCanceledException>();
         }
 
         /// <summary>

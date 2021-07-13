@@ -2,6 +2,8 @@
 using System.IO;
 using System.Numerics;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ExtensionNet
 {
@@ -1129,6 +1131,40 @@ namespace ExtensionNet
             using (MemoryStream ms = new MemoryStream())
             {
                 stream.CopyTo(ms);
+                return ms.ToArray();
+            }
+        }
+
+        /// <summary>
+        /// Reads the remaining bytes of the stream.
+        /// </summary>
+        /// <param name="stream">The stream to read.</param>
+        /// <returns>The remaining bytes of the stream.</returns>
+        public static Task<byte[]> ReadAllBytesAsync(this Stream stream)
+            => stream.ReadAllBytesAsync(CancellationToken.None);
+
+        /// <summary>
+        /// Reads the remaining bytes of the stream.
+        /// </summary>
+        /// <param name="stream">The stream to read.</param>
+        /// <param name="ct">The cancellation token.</param>
+        /// <returns>The remaining bytes of the stream.</returns>
+        public static async Task<byte[]> ReadAllBytesAsync(this Stream stream, CancellationToken ct)
+        {
+            if (stream is null)
+            {
+                throw new ArgumentNullException(nameof(stream));
+            }
+
+            using (MemoryStream ms = new MemoryStream())
+            {
+                Task ctTask = ct.Task();
+                Task finished = await Task.WhenAny(ctTask, stream.CopyToAsync(ms));
+                if (finished == ctTask)
+                {
+                    ct.ThrowIfCancellationRequested();
+                }
+
                 return ms.ToArray();
             }
         }
