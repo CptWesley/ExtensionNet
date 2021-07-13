@@ -407,6 +407,21 @@ namespace ExtensionNet.Tests
         }
 
         /// <summary>
+        /// Checks that strings are by default null-terminated.
+        /// </summary>
+        [Fact]
+        public void NullTerminatedStrings()
+        {
+            string s1 = "Hello ";
+            string s2 = "World!";
+            stream.Write(s1);
+            stream.Write(s2);
+            stream.Position = 0;
+            AssertThat(stream.ReadString()).IsEqualTo(s1);
+            AssertThat(stream.ReadString()).IsEqualTo(s2);
+        }
+
+        /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
         public void Dispose()

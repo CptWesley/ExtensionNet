@@ -64,7 +64,15 @@ namespace ExtensionNet
                 throw new ArgumentNullException(nameof(encoding));
             }
 
-            return encoding.GetString(stream.ReadAllBytes());
+            List<byte> bytes = new List<byte>();
+
+            byte b;
+            while ((b = stream.ReadUInt8()) != 0)
+            {
+                bytes.Add(b);
+            }
+
+            return encoding.GetString(bytes.ToArray());
         }
 
         /// <summary>
@@ -564,8 +572,18 @@ namespace ExtensionNet
         /// </summary>
         /// <param name="stream">The stream to write to.</param>
         /// <param name="value">String to write to stream.</param>
+        /// <param name="nullTerminated">Indicates whether the string is null terminated.</param>
+        public static void Write(this Stream stream, string value, bool nullTerminated)
+            => stream.Write(value, Encoding.Default, nullTerminated);
+
+        /// <summary>
+        /// Writes a string to the stream.
+        /// </summary>
+        /// <param name="stream">The stream to write to.</param>
+        /// <param name="value">String to write to stream.</param>
         /// <param name="encoding">The encoding of the string.</param>
-        public static void Write(this Stream stream, string value, Encoding encoding)
+        /// <param name="nullTerminated">Indicates whether the string is null terminated.</param>
+        public static void Write(this Stream stream, string value, Encoding encoding, bool nullTerminated)
         {
             if (value is null)
             {
@@ -578,7 +596,21 @@ namespace ExtensionNet
             }
 
             stream.Write(encoding.GetBytes(value));
+
+            if (nullTerminated)
+            {
+                stream.Write('\0');
+            }
         }
+
+        /// <summary>
+        /// Writes a string to the stream.
+        /// </summary>
+        /// <param name="stream">The stream to write to.</param>
+        /// <param name="value">String to write to stream.</param>
+        /// <param name="encoding">The encoding of the string.</param>
+        public static void Write(this Stream stream, string value, Encoding encoding)
+            => stream.Write(value, encoding, true);
 
         /// <summary>
         /// Writes a char to the stream.
