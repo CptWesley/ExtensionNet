@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Text;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -1316,5 +1317,31 @@ namespace ExtensionNet
         /// <returns>The bytes currently available from the stream.</returns>
         public static Task<byte[]> ReadAsync(this Stream stream)
             => stream.ReadAsync(DefaultBufferSize);
+
+        /// <summary>
+        /// Writes the object in JSON format to the stream as a null-terminated string.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <param name="obj">The object.</param>
+        public static void WriteJson(this Stream stream, object obj)
+            => stream.Write(JsonSerializer.Serialize(obj));
+
+        /// <summary>
+        /// Reads an object in null-terminated JSON format from the stream.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <param name="type">The type of the object.</param>
+        /// <returns>The parsed object.</returns>
+        public static object? ReadJson(this Stream stream, Type type)
+            => JsonSerializer.Deserialize(stream.ReadString(), type);
+
+        /// <summary>
+        /// Reads an object in null-terminated JSON format from the stream.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <typeparam name="T">The type of the object.</typeparam>
+        /// <returns>The parsed object.</returns>
+        public static T ReadJson<T>(this Stream stream)
+            => (T)stream.ReadJson(typeof(T))!;
     }
 }

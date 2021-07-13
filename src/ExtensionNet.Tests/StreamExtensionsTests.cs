@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Numerics;
@@ -419,6 +420,24 @@ namespace ExtensionNet.Tests
             stream.Position = 0;
             AssertThat(stream.ReadString()).IsEqualTo(s1);
             AssertThat(stream.ReadString()).IsEqualTo(s2);
+        }
+
+        /// <summary>
+        /// Checks that reading JSON objects works correctly.
+        /// </summary>
+        [Fact]
+        public void JsonTest()
+        {
+            Dictionary<string, string> dict = new Dictionary<string, string>
+            {
+                { "key1", "val1" },
+                { "key2", "val2" },
+                { "key3", "val3" },
+            };
+            stream.WriteJson(dict);
+            stream.Position = 0;
+            Dictionary<string, string> dict2 = stream.ReadJson<Dictionary<string, string>>();
+            AssertThat(dict2).ContainsExactlyInAnyOrder(dict);
         }
 
         /// <summary>
