@@ -48,9 +48,9 @@ namespace ExtensionNet
                 return (T)copy;
             }
 
-            if (that.GetType().IsArray)
+            if (that is Array thatA)
             {
-                return (T)CopyArray(that as Array, deep, copies);
+                return (T)CopyArray(thatA, deep, copies);
             }
 
             return (T)CopyObject(that, deep, copies);
