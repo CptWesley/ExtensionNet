@@ -16,7 +16,7 @@ namespace ExtensionNet
         /// <summary>
         /// The default buffer size.
         /// </summary>
-        public const int DefaultBufferSize = 2048;
+        public const int DefaultBufferSize = 4096;
 
         /// <summary>
         /// Reads a single char from the stream.
