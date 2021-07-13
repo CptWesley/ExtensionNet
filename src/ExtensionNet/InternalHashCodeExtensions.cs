@@ -49,9 +49,9 @@ namespace ExtensionNet
             hashes.Add(thatWrapper);
 
             int result;
-            if (type.IsArray)
+            if (that is Array thatA)
             {
-                result = GetArrayHash(that as Array, deep, hashes);
+                result = GetArrayHash(thatA, deep, hashes);
             }
             else
             {

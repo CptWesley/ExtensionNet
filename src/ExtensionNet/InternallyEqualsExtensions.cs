@@ -15,7 +15,7 @@ namespace ExtensionNet
         /// <param name="that">The object to check for.</param>
         /// <param name="other">The object to check with.</param>
         /// <returns>True if internally equal, false otherwise.</returns>
-        public static bool InternallyEquals(this object that, object other)
+        public static bool InternallyEquals(this object? that, object? other)
             => InternallyEquals(that, other, false);
 
         /// <summary>
@@ -25,10 +25,10 @@ namespace ExtensionNet
         /// <param name="other">The object to check with.</param>
         /// <param name="deep">Determines whether or not the comparison is recursive.</param>
         /// <returns>True if internally equal, false otherwise.</returns>
-        public static bool InternallyEquals(this object that, object other, bool deep)
+        public static bool InternallyEquals(this object? that, object? other, bool deep)
             => that.InternallyEquals(other, deep, new Dictionary<ReferenceWrapper, HashSet<ReferenceWrapper>>());
 
-        private static bool InternallyEquals(this object that, object other, bool deep, Dictionary<ReferenceWrapper, HashSet<ReferenceWrapper>> comparisons)
+        private static bool InternallyEquals(this object? that, object? other, bool deep, Dictionary<ReferenceWrapper, HashSet<ReferenceWrapper>> comparisons)
         {
             if (that is null)
             {
@@ -63,9 +63,9 @@ namespace ExtensionNet
 
             comparisons.AddComparison(thatWrapper, otherWrapper);
 
-            if (type.IsArray)
+            if (that is Array thatA && other is Array otherA)
             {
-                return ArrayEquals(that as Array, other as Array, deep, comparisons);
+                return ArrayEquals(thatA, otherA, deep, comparisons);
             }
 
             return ObjectEquals(that, other, deep, comparisons);
@@ -87,7 +87,7 @@ namespace ExtensionNet
                     continue;
                 }
 
-                if (!(deep ? thatCur.InternallyEquals(otherCur, deep, comparisons) : thatCur.Equals(otherCur)))
+                if (!(deep ? thatCur.InternallyEquals(otherCur, deep, comparisons) : thatCur is null || thatCur.Equals(otherCur)))
                 {
                     return false;
                 }
@@ -96,9 +96,9 @@ namespace ExtensionNet
             return true;
         }
 
-        private static bool ObjectEquals(object that, object other, bool deep, Dictionary<ReferenceWrapper, HashSet<ReferenceWrapper>> comparisons)
+        private static bool ObjectEquals(object? that, object? other, bool deep, Dictionary<ReferenceWrapper, HashSet<ReferenceWrapper>> comparisons)
         {
-            Type type = that.GetType();
+            Type? type = that?.GetType();
             while (type != null)
             {
                 if (!EqualsForType(that, other, type, deep, comparisons))
@@ -112,7 +112,7 @@ namespace ExtensionNet
             return true;
         }
 
-        private static bool EqualsForType(object that, object other, Type type, bool deep, Dictionary<ReferenceWrapper, HashSet<ReferenceWrapper>> comparisons)
+        private static bool EqualsForType(object? that, object? other, Type type, bool deep, Dictionary<ReferenceWrapper, HashSet<ReferenceWrapper>> comparisons)
         {
             FieldInfo[] fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly);
 

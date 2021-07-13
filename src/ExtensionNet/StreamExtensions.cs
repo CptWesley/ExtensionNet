@@ -1,7 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Numerics;
 using System.Text;
+using System.Text.Json;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ExtensionNet
 {
@@ -10,6 +15,11 @@ namespace ExtensionNet
     /// </summary>
     public static class StreamExtensions
     {
+        /// <summary>
+        /// The default buffer size.
+        /// </summary>
+        public const int DefaultBufferSize = 4096;
+
         /// <summary>
         /// Reads a single char from the stream.
         /// </summary>
@@ -56,7 +66,15 @@ namespace ExtensionNet
                 throw new ArgumentNullException(nameof(encoding));
             }
 
-            return encoding.GetString(stream.ReadAllBytes());
+            List<byte> bytes = new List<byte>();
+
+            byte b;
+            while ((b = stream.ReadUInt8()) != 0)
+            {
+                bytes.Add(b);
+            }
+
+            return encoding.GetString(bytes.ToArray());
         }
 
         /// <summary>
@@ -556,8 +574,18 @@ namespace ExtensionNet
         /// </summary>
         /// <param name="stream">The stream to write to.</param>
         /// <param name="value">String to write to stream.</param>
+        /// <param name="nullTerminated">Indicates whether the string is null terminated.</param>
+        public static void Write(this Stream stream, string value, bool nullTerminated)
+            => stream.Write(value, Encoding.Default, nullTerminated);
+
+        /// <summary>
+        /// Writes a string to the stream.
+        /// </summary>
+        /// <param name="stream">The stream to write to.</param>
+        /// <param name="value">String to write to stream.</param>
         /// <param name="encoding">The encoding of the string.</param>
-        public static void Write(this Stream stream, string value, Encoding encoding)
+        /// <param name="nullTerminated">Indicates whether the string is null terminated.</param>
+        public static void Write(this Stream stream, string value, Encoding encoding, bool nullTerminated)
         {
             if (value is null)
             {
@@ -570,7 +598,21 @@ namespace ExtensionNet
             }
 
             stream.Write(encoding.GetBytes(value));
+
+            if (nullTerminated)
+            {
+                stream.Write('\0');
+            }
         }
+
+        /// <summary>
+        /// Writes a string to the stream.
+        /// </summary>
+        /// <param name="stream">The stream to write to.</param>
+        /// <param name="value">String to write to stream.</param>
+        /// <param name="encoding">The encoding of the string.</param>
+        public static void Write(this Stream stream, string value, Encoding encoding)
+            => stream.Write(value, encoding, true);
 
         /// <summary>
         /// Writes a char to the stream.
@@ -585,7 +627,7 @@ namespace ExtensionNet
         /// </summary>
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">Chars to write to the stream.</param>
-        public static void Write(this Stream stream, char[] values)
+        public static void Write(this Stream stream, IEnumerable<char> values)
         {
             if (stream is null)
             {
@@ -639,6 +681,14 @@ namespace ExtensionNet
         }
 
         /// <summary>
+        /// Writes bytes to the stream.
+        /// </summary>
+        /// <param name="stream">The stream to write to.</param>
+        /// <param name="values">Bytes to write to the stream.</param>
+        public static void Write(this Stream stream, IEnumerable<byte> values)
+            => stream.Write(values.ToArray());
+
+        /// <summary>
         /// Writes a signed byte to the stream.
         /// </summary>
         /// <param name="stream">The stream to write to.</param>
@@ -651,7 +701,7 @@ namespace ExtensionNet
         /// </summary>
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">Signed bytes to write to the stream.</param>
-        public static void Write(this Stream stream, sbyte[] values)
+        public static void Write(this Stream stream, IEnumerable<sbyte> values)
         {
             if (stream is null)
             {
@@ -692,7 +742,7 @@ namespace ExtensionNet
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">Unsigned shorts to write to the stream.</param>
         /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
-        public static void Write(this Stream stream, ushort[] values, Endianness endianness)
+        public static void Write(this Stream stream, IEnumerable<ushort> values, Endianness endianness)
         {
             if (stream is null)
             {
@@ -715,7 +765,7 @@ namespace ExtensionNet
         /// </summary>
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">Unsigned shorts to write to the stream.</param>
-        public static void Write(this Stream stream, ushort[] values)
+        public static void Write(this Stream stream, IEnumerable<ushort> values)
             => stream.Write(values, ByteConverter.Endianness);
 
         /// <summary>
@@ -741,7 +791,7 @@ namespace ExtensionNet
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">Signed shorts to write to the stream.</param>
         /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
-        public static void Write(this Stream stream, short[] values, Endianness endianness)
+        public static void Write(this Stream stream, IEnumerable<short> values, Endianness endianness)
         {
             if (stream is null)
             {
@@ -764,7 +814,7 @@ namespace ExtensionNet
         /// </summary>
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">Signed shorts to write to the stream.</param>
-        public static void Write(this Stream stream, short[] values)
+        public static void Write(this Stream stream, IEnumerable<short> values)
             => stream.Write(values, ByteConverter.Endianness);
 
         /// <summary>
@@ -790,7 +840,7 @@ namespace ExtensionNet
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">Unsigned integers to write to the stream.</param>
         /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
-        public static void Write(this Stream stream, uint[] values, Endianness endianness)
+        public static void Write(this Stream stream, IEnumerable<uint> values, Endianness endianness)
         {
             if (stream is null)
             {
@@ -813,7 +863,7 @@ namespace ExtensionNet
         /// </summary>
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">Unsigned integers to write to the stream.</param>
-        public static void Write(this Stream stream, uint[] values)
+        public static void Write(this Stream stream, IEnumerable<uint> values)
             => stream.Write(values, ByteConverter.Endianness);
 
         /// <summary>
@@ -839,7 +889,7 @@ namespace ExtensionNet
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">Signed integers to write to the stream.</param>
         /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
-        public static void Write(this Stream stream, int[] values, Endianness endianness)
+        public static void Write(this Stream stream, IEnumerable<int> values, Endianness endianness)
         {
             if (stream is null)
             {
@@ -862,7 +912,7 @@ namespace ExtensionNet
         /// </summary>
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">Signed integers to write to the stream.</param>
-        public static void Write(this Stream stream, int[] values)
+        public static void Write(this Stream stream, IEnumerable<int> values)
             => stream.Write(values, ByteConverter.Endianness);
 
         /// <summary>
@@ -888,7 +938,7 @@ namespace ExtensionNet
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">Unsigned longs to write to the stream.</param>
         /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
-        public static void Write(this Stream stream, ulong[] values, Endianness endianness)
+        public static void Write(this Stream stream, IEnumerable<ulong> values, Endianness endianness)
         {
             if (stream is null)
             {
@@ -911,7 +961,7 @@ namespace ExtensionNet
         /// </summary>
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">Unsigned longs to write to the stream.</param>
-        public static void Write(this Stream stream, ulong[] values)
+        public static void Write(this Stream stream, IEnumerable<ulong> values)
             => stream.Write(values, ByteConverter.Endianness);
 
         /// <summary>
@@ -937,7 +987,7 @@ namespace ExtensionNet
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">Signed longs to write to the stream.</param>
         /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
-        public static void Write(this Stream stream, long[] values, Endianness endianness)
+        public static void Write(this Stream stream, IEnumerable<long> values, Endianness endianness)
         {
             if (stream is null)
             {
@@ -960,7 +1010,7 @@ namespace ExtensionNet
         /// </summary>
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">Signed longs to write to the stream.</param>
-        public static void Write(this Stream stream, long[] values)
+        public static void Write(this Stream stream, IEnumerable<long> values)
             => stream.Write(values, ByteConverter.Endianness);
 
         /// <summary>
@@ -989,7 +1039,7 @@ namespace ExtensionNet
         /// <param name="values">Big integers to write to the stream.</param>
         /// <param name="size">The number of bytes a big integer should take.</param>
         /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
-        public static void Write(this Stream stream, BigInteger[] values, int size, Endianness endianness)
+        public static void Write(this Stream stream, IEnumerable<BigInteger> values, int size, Endianness endianness)
         {
             if (stream is null)
             {
@@ -1013,7 +1063,7 @@ namespace ExtensionNet
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">Big integers to write to the stream.</param>
         /// <param name="size">The number of bytes a big integer should take.</param>
-        public static void Write(this Stream stream, BigInteger[] values, int size)
+        public static void Write(this Stream stream, IEnumerable<BigInteger> values, int size)
             => stream.Write(values, size, ByteConverter.Endianness);
 
         /// <summary>
@@ -1039,7 +1089,7 @@ namespace ExtensionNet
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">Signed longs to write to the stream.</param>
         /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
-        public static void Write(this Stream stream, float[] values, Endianness endianness)
+        public static void Write(this Stream stream, IEnumerable<float> values, Endianness endianness)
         {
             if (stream is null)
             {
@@ -1062,7 +1112,7 @@ namespace ExtensionNet
         /// </summary>
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">Signed longs to write to the stream.</param>
-        public static void Write(this Stream stream, float[] values)
+        public static void Write(this Stream stream, IEnumerable<float> values)
             => stream.Write(values, ByteConverter.Endianness);
 
         /// <summary>
@@ -1088,7 +1138,7 @@ namespace ExtensionNet
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">Signed longs to write to the stream.</param>
         /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
-        public static void Write(this Stream stream, double[] values, Endianness endianness)
+        public static void Write(this Stream stream, IEnumerable<double> values, Endianness endianness)
         {
             if (stream is null)
             {
@@ -1111,7 +1161,7 @@ namespace ExtensionNet
         /// </summary>
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">Signed longs to write to the stream.</param>
-        public static void Write(this Stream stream, double[] values)
+        public static void Write(this Stream stream, IEnumerable<double> values)
             => stream.Write(values, ByteConverter.Endianness);
 
         /// <summary>
@@ -1134,11 +1184,261 @@ namespace ExtensionNet
         }
 
         /// <summary>
+        /// Reads the remaining bytes of the stream.
+        /// </summary>
+        /// <param name="stream">The stream to read.</param>
+        /// <returns>The remaining bytes of the stream.</returns>
+        public static Task<byte[]> ReadAllBytesAsync(this Stream stream)
+            => stream.ReadAllBytesAsync(CancellationToken.None);
+
+        /// <summary>
+        /// Reads the remaining bytes of the stream.
+        /// </summary>
+        /// <param name="stream">The stream to read.</param>
+        /// <param name="ct">The cancellation token.</param>
+        /// <returns>The remaining bytes of the stream.</returns>
+        public static async Task<byte[]> ReadAllBytesAsync(this Stream stream, CancellationToken ct)
+        {
+            if (stream is null)
+            {
+                throw new ArgumentNullException(nameof(stream));
+            }
+
+            using (MemoryStream ms = new MemoryStream())
+            {
+                Task ctTask = ct.Task();
+                Task finished = await Task.WhenAny(ctTask, stream.CopyToAsync(ms)).ConfigureAwait(false);
+                if (finished == ctTask)
+                {
+                    ct.ThrowIfCancellationRequested();
+                }
+
+                return ms.ToArray();
+            }
+        }
+
+        /// <summary>
         /// Converts a byte array to a stream.
         /// </summary>
         /// <param name="bytes">The bytes contained in the stream.</param>
         /// <returns>The newly created stream.</returns>
         public static Stream ToStream(this byte[] bytes)
             => new MemoryStream(bytes);
+
+        /// <summary>
+        /// Reads the currently available bytes from the stream.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <param name="bufferSize">The buffer size. Must be positive integer.</param>
+        /// <returns>The bytes currently available from the stream.</returns>
+        public static byte[] Read(this Stream stream, int bufferSize)
+        {
+            if (bufferSize <= 0)
+            {
+                throw new ArgumentException("Buffer size must be positive.", nameof(bufferSize));
+            }
+
+            List<byte> bytes = new List<byte>();
+            byte[] buffer = new byte[bufferSize];
+            int read = 0;
+            while (stream.CanRead && (read != 0 || bytes.Count == 0))
+            {
+                read = stream.Read(buffer, 0, buffer.Length);
+
+                for (int i = 0; i < read; i++)
+                {
+                    bytes.Add(buffer[i]);
+                }
+            }
+
+            return bytes.ToArray();
+        }
+
+        /// <summary>
+        /// Reads the currently available bytes from the stream.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <returns>The bytes currently available from the stream.</returns>
+        public static byte[] Read(this Stream stream)
+            => stream.Read(DefaultBufferSize);
+
+        /// <summary>
+        /// Reads the currently available bytes from the stream.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <param name="bufferSize">The buffer size. Must be positive integer.</param>
+        /// <param name="ct">The cancellation token.</param>
+        /// <returns>The bytes currently available from the stream.</returns>
+        public static async Task<byte[]> ReadAsync(this Stream stream, int bufferSize, CancellationToken ct)
+        {
+            if (bufferSize <= 0)
+            {
+                throw new ArgumentException("Buffer size must be positive.", nameof(bufferSize));
+            }
+
+            List<byte> bytes = new List<byte>();
+            byte[] buffer = new byte[bufferSize];
+            int read = 0;
+            while (stream.CanRead && (read != 0 || bytes.Count == 0))
+            {
+                read = await stream.ReadAsync(buffer, 0, buffer.Length, ct).ConfigureAwait(false);
+
+                for (int i = 0; i < read; i++)
+                {
+                    bytes.Add(buffer[i]);
+                }
+            }
+
+            return bytes.ToArray();
+        }
+
+        /// <summary>
+        /// Reads the currently available bytes from the stream.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <param name="ct">The cancellation token.</param>
+        /// <returns>The bytes currently available from the stream.</returns>
+        public static Task<byte[]> ReadAsync(this Stream stream, CancellationToken ct)
+            => stream.ReadAsync(DefaultBufferSize, ct);
+
+        /// <summary>
+        /// Reads the currently available bytes from the stream.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <param name="bufferSize">The size of the buffer to be used.</param>
+        /// <returns>The bytes currently available from the stream.</returns>
+        public static Task<byte[]> ReadAsync(this Stream stream, int bufferSize)
+            => stream.ReadAsync(bufferSize, CancellationToken.None);
+
+        /// <summary>
+        /// Reads the currently available bytes from the stream.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <returns>The bytes currently available from the stream.</returns>
+        public static Task<byte[]> ReadAsync(this Stream stream)
+            => stream.ReadAsync(DefaultBufferSize);
+
+        /// <summary>
+        /// Writes the object in JSON format to the stream as a null-terminated string.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <param name="obj">The object.</param>
+        public static void WriteJson(this Stream stream, object obj)
+            => stream.Write(JsonSerializer.Serialize(obj));
+
+        /// <summary>
+        /// Reads an object in null-terminated JSON format from the stream.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <param name="type">The type of the object.</param>
+        /// <returns>The parsed object.</returns>
+        public static object? ReadJson(this Stream stream, Type type)
+            => JsonSerializer.Deserialize(stream.ReadString(), type);
+
+        /// <summary>
+        /// Reads an object in null-terminated JSON format from the stream.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <typeparam name="T">The type of the object.</typeparam>
+        /// <returns>The parsed object.</returns>
+        public static T ReadJson<T>(this Stream stream)
+            => (T)stream.ReadJson(typeof(T))!;
+
+        /// <summary>
+        /// Reads a single char from the stream.
+        /// </summary>
+        /// <param name="stream">The stream to read from.</param>
+        /// <param name="ct">The cancellation token.</param>
+        /// <returns>First char on the stream.</returns>
+        public static Task<string> ReadStringAsync(this Stream stream, CancellationToken ct)
+            => stream.ReadStringAsync(Encoding.Default, ct);
+
+        /// <summary>
+        /// Reads a single char from the stream.
+        /// </summary>
+        /// <param name="stream">The stream to read from.</param>
+        /// <param name="encoding">The encoding of the string.</param>
+        /// <param name="ct">The cancellation token.</param>
+        /// <returns>First char on the stream.</returns>
+        public static async Task<string> ReadStringAsync(this Stream stream, Encoding encoding, CancellationToken ct)
+        {
+            if (encoding is null)
+            {
+                throw new ArgumentNullException(nameof(encoding));
+            }
+
+            List<byte> bytes = new List<byte>();
+
+            await Task.Run(
+                () =>
+                {
+                    byte b;
+                    while ((b = stream.ReadUInt8()) != 0)
+                    {
+                        bytes.Add(b);
+                    }
+                },
+                ct).ConfigureAwait(false);
+
+            return encoding.GetString(bytes.ToArray());
+        }
+
+        /// <summary>
+        /// Reads a single char from the stream.
+        /// </summary>
+        /// <param name="stream">The stream to read from.</param>
+        /// <returns>First char on the stream.</returns>
+        public static Task<string> ReadStringAsync(this Stream stream)
+            => stream.ReadStringAsync(CancellationToken.None);
+
+        /// <summary>
+        /// Reads a single char from the stream.
+        /// </summary>
+        /// <param name="stream">The stream to read from.</param>
+        /// <param name="encoding">The encoding of the string.</param>
+        /// <returns>First char on the stream.</returns>
+        public static Task<string> ReadStringAsync(this Stream stream, Encoding encoding)
+            => stream.ReadStringAsync(encoding, CancellationToken.None);
+
+        /// <summary>
+        /// Reads an object in null-terminated JSON format from the stream.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <param name="type">The type of the object.</param>
+        /// <param name="ct">The cancellation token.</param>
+        /// <returns>The parsed object.</returns>
+        public static async Task<object?> ReadJsonAsync(this Stream stream, Type type, CancellationToken ct)
+            => JsonSerializer.Deserialize(await stream.ReadStringAsync(ct).ConfigureAwait(false), type);
+
+        /// <summary>
+        /// Reads an object in null-terminated JSON format from the stream.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <param name="ct">The cancellation token.</param>
+        /// <typeparam name="T">The type of the object.</typeparam>
+        /// <returns>The parsed object.</returns>
+        public static async Task<T> ReadJsonAsync<T>(this Stream stream, CancellationToken ct)
+        {
+            object? obj = await stream.ReadJsonAsync(typeof(T), ct).ConfigureAwait(false);
+            return (T)obj!;
+        }
+
+        /// <summary>
+        /// Reads an object in null-terminated JSON format from the stream.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <param name="type">The type of the object.</param>
+        /// <returns>The parsed object.</returns>
+        public static Task<object?> ReadJsonAsync(this Stream stream, Type type)
+            => stream.ReadJsonAsync(type, CancellationToken.None);
+
+        /// <summary>
+        /// Reads an object in null-terminated JSON format from the stream.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <typeparam name="T">The type of the object.</typeparam>
+        /// <returns>The parsed object.</returns>
+        public static Task<T> ReadJsonAsync<T>(this Stream stream)
+            => stream.ReadJsonAsync<T>(CancellationToken.None);
     }
 }

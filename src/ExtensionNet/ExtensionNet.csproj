@@ -8,10 +8,12 @@
     <PackageLicenseUrl>https://github.com/CptWesley/ExtensionNet/blob/master/LICENSE</PackageLicenseUrl>
     <Description>Adds general use extension methods to C# classes.</Description>
     <PackageTags>object extension deep shallow copy streams</PackageTags>
-    <Version>0.1.5.2</Version>
+    <Version>0.1.6</Version>
     <AssemblyVersion>$(Version)</AssemblyVersion>
     <FileVersion>$(Version)</FileVersion>
     <DocumentationFile>bin\$(AssemblyName).xml</DocumentationFile>
+    <LangVersion>9</LangVersion>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
   
   <ItemGroup>
@@ -19,12 +21,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.0.0">
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="5.0.3">
       <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
+    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.354">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="System.Text.Json" Version="6.0.0-preview.5.21301.5" />
   </ItemGroup>
 </Project>
