@@ -1343,5 +1343,102 @@ namespace ExtensionNet
         /// <returns>The parsed object.</returns>
         public static T ReadJson<T>(this Stream stream)
             => (T)stream.ReadJson(typeof(T))!;
+
+        /// <summary>
+        /// Reads a single char from the stream.
+        /// </summary>
+        /// <param name="stream">The stream to read from.</param>
+        /// <param name="ct">The cancellation token.</param>
+        /// <returns>First char on the stream.</returns>
+        public static Task<string> ReadStringAsync(this Stream stream, CancellationToken ct)
+            => stream.ReadStringAsync(Encoding.Default, ct);
+
+        /// <summary>
+        /// Reads a single char from the stream.
+        /// </summary>
+        /// <param name="stream">The stream to read from.</param>
+        /// <param name="encoding">The encoding of the string.</param>
+        /// <param name="ct">The cancellation token.</param>
+        /// <returns>First char on the stream.</returns>
+        public static async Task<string> ReadStringAsync(this Stream stream, Encoding encoding, CancellationToken ct)
+        {
+            if (encoding is null)
+            {
+                throw new ArgumentNullException(nameof(encoding));
+            }
+
+            List<byte> bytes = new List<byte>();
+
+            await Task.Run(
+                () =>
+                {
+                    byte b;
+                    while ((b = stream.ReadUInt8()) != 0)
+                    {
+                        bytes.Add(b);
+                    }
+                },
+                ct).ConfigureAwait(false);
+
+            return encoding.GetString(bytes.ToArray());
+        }
+
+        /// <summary>
+        /// Reads a single char from the stream.
+        /// </summary>
+        /// <param name="stream">The stream to read from.</param>
+        /// <returns>First char on the stream.</returns>
+        public static Task<string> ReadStringAsync(this Stream stream)
+            => stream.ReadStringAsync(CancellationToken.None);
+
+        /// <summary>
+        /// Reads a single char from the stream.
+        /// </summary>
+        /// <param name="stream">The stream to read from.</param>
+        /// <param name="encoding">The encoding of the string.</param>
+        /// <returns>First char on the stream.</returns>
+        public static Task<string> ReadStringAsync(this Stream stream, Encoding encoding)
+            => stream.ReadStringAsync(encoding, CancellationToken.None);
+
+        /// <summary>
+        /// Reads an object in null-terminated JSON format from the stream.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <param name="type">The type of the object.</param>
+        /// <param name="ct">The cancellation token.</param>
+        /// <returns>The parsed object.</returns>
+        public static async Task<object?> ReadJsonAsync(this Stream stream, Type type, CancellationToken ct)
+            => JsonSerializer.Deserialize(await stream.ReadStringAsync(ct).ConfigureAwait(false), type);
+
+        /// <summary>
+        /// Reads an object in null-terminated JSON format from the stream.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <param name="ct">The cancellation token.</param>
+        /// <typeparam name="T">The type of the object.</typeparam>
+        /// <returns>The parsed object.</returns>
+        public static async Task<T> ReadJsonAsync<T>(this Stream stream, CancellationToken ct)
+        {
+            object? obj = await stream.ReadJsonAsync(typeof(T), ct).ConfigureAwait(false);
+            return (T)obj!;
+        }
+
+        /// <summary>
+        /// Reads an object in null-terminated JSON format from the stream.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <param name="type">The type of the object.</param>
+        /// <returns>The parsed object.</returns>
+        public static Task<object?> ReadJsonAsync(this Stream stream, Type type)
+            => stream.ReadJsonAsync(type, CancellationToken.None);
+
+        /// <summary>
+        /// Reads an object in null-terminated JSON format from the stream.
+        /// </summary>
+        /// <param name="stream">The stream.</param>
+        /// <typeparam name="T">The type of the object.</typeparam>
+        /// <returns>The parsed object.</returns>
+        public static Task<T> ReadJsonAsync<T>(this Stream stream)
+            => stream.ReadJsonAsync<T>(CancellationToken.None);
     }
 }

@@ -441,6 +441,24 @@ namespace ExtensionNet.Tests
         }
 
         /// <summary>
+        /// Checks that reading JSON objects works correctly.
+        /// </summary>
+        [Fact]
+        public void JsonAsyncTest()
+        {
+            Dictionary<string, string> dict = new Dictionary<string, string>
+            {
+                { "key1", "val1" },
+                { "key2", "val2" },
+                { "key3", "val3" },
+            };
+            stream.WriteJson(dict);
+            stream.Position = 0;
+            Dictionary<string, string> dict2 = stream.ReadJsonAsync<Dictionary<string, string>>().Result;
+            AssertThat(dict2).ContainsExactlyInAnyOrder(dict);
+        }
+
+        /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
         public void Dispose()
