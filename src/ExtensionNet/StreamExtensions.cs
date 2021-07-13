@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading;
@@ -625,7 +626,7 @@ namespace ExtensionNet
         /// </summary>
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">Chars to write to the stream.</param>
-        public static void Write(this Stream stream, char[] values)
+        public static void Write(this Stream stream, IEnumerable<char> values)
         {
             if (stream is null)
             {
@@ -679,6 +680,14 @@ namespace ExtensionNet
         }
 
         /// <summary>
+        /// Writes bytes to the stream.
+        /// </summary>
+        /// <param name="stream">The stream to write to.</param>
+        /// <param name="values">Bytes to write to the stream.</param>
+        public static void Write(this Stream stream, IEnumerable<byte> values)
+            => stream.Write(values.ToArray());
+
+        /// <summary>
         /// Writes a signed byte to the stream.
         /// </summary>
         /// <param name="stream">The stream to write to.</param>
@@ -691,7 +700,7 @@ namespace ExtensionNet
         /// </summary>
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">Signed bytes to write to the stream.</param>
-        public static void Write(this Stream stream, sbyte[] values)
+        public static void Write(this Stream stream, IEnumerable<sbyte> values)
         {
             if (stream is null)
             {
@@ -732,7 +741,7 @@ namespace ExtensionNet
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">Unsigned shorts to write to the stream.</param>
         /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
-        public static void Write(this Stream stream, ushort[] values, Endianness endianness)
+        public static void Write(this Stream stream, IEnumerable<ushort> values, Endianness endianness)
         {
             if (stream is null)
             {
@@ -755,7 +764,7 @@ namespace ExtensionNet
         /// </summary>
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">Unsigned shorts to write to the stream.</param>
-        public static void Write(this Stream stream, ushort[] values)
+        public static void Write(this Stream stream, IEnumerable<ushort> values)
             => stream.Write(values, ByteConverter.Endianness);
 
         /// <summary>
@@ -781,7 +790,7 @@ namespace ExtensionNet
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">Signed shorts to write to the stream.</param>
         /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
-        public static void Write(this Stream stream, short[] values, Endianness endianness)
+        public static void Write(this Stream stream, IEnumerable<short> values, Endianness endianness)
         {
             if (stream is null)
             {
@@ -804,7 +813,7 @@ namespace ExtensionNet
         /// </summary>
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">Signed shorts to write to the stream.</param>
-        public static void Write(this Stream stream, short[] values)
+        public static void Write(this Stream stream, IEnumerable<short> values)
             => stream.Write(values, ByteConverter.Endianness);
 
         /// <summary>
@@ -830,7 +839,7 @@ namespace ExtensionNet
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">Unsigned integers to write to the stream.</param>
         /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
-        public static void Write(this Stream stream, uint[] values, Endianness endianness)
+        public static void Write(this Stream stream, IEnumerable<uint> values, Endianness endianness)
         {
             if (stream is null)
             {
@@ -853,7 +862,7 @@ namespace ExtensionNet
         /// </summary>
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">Unsigned integers to write to the stream.</param>
-        public static void Write(this Stream stream, uint[] values)
+        public static void Write(this Stream stream, IEnumerable<uint> values)
             => stream.Write(values, ByteConverter.Endianness);
 
         /// <summary>
@@ -879,7 +888,7 @@ namespace ExtensionNet
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">Signed integers to write to the stream.</param>
         /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
-        public static void Write(this Stream stream, int[] values, Endianness endianness)
+        public static void Write(this Stream stream, IEnumerable<int> values, Endianness endianness)
         {
             if (stream is null)
             {
@@ -902,7 +911,7 @@ namespace ExtensionNet
         /// </summary>
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">Signed integers to write to the stream.</param>
-        public static void Write(this Stream stream, int[] values)
+        public static void Write(this Stream stream, IEnumerable<int> values)
             => stream.Write(values, ByteConverter.Endianness);
 
         /// <summary>
@@ -928,7 +937,7 @@ namespace ExtensionNet
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">Unsigned longs to write to the stream.</param>
         /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
-        public static void Write(this Stream stream, ulong[] values, Endianness endianness)
+        public static void Write(this Stream stream, IEnumerable<ulong> values, Endianness endianness)
         {
             if (stream is null)
             {
@@ -951,7 +960,7 @@ namespace ExtensionNet
         /// </summary>
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">Unsigned longs to write to the stream.</param>
-        public static void Write(this Stream stream, ulong[] values)
+        public static void Write(this Stream stream, IEnumerable<ulong> values)
             => stream.Write(values, ByteConverter.Endianness);
 
         /// <summary>
@@ -977,7 +986,7 @@ namespace ExtensionNet
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">Signed longs to write to the stream.</param>
         /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
-        public static void Write(this Stream stream, long[] values, Endianness endianness)
+        public static void Write(this Stream stream, IEnumerable<long> values, Endianness endianness)
         {
             if (stream is null)
             {
@@ -1000,7 +1009,7 @@ namespace ExtensionNet
         /// </summary>
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">Signed longs to write to the stream.</param>
-        public static void Write(this Stream stream, long[] values)
+        public static void Write(this Stream stream, IEnumerable<long> values)
             => stream.Write(values, ByteConverter.Endianness);
 
         /// <summary>
@@ -1029,7 +1038,7 @@ namespace ExtensionNet
         /// <param name="values">Big integers to write to the stream.</param>
         /// <param name="size">The number of bytes a big integer should take.</param>
         /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
-        public static void Write(this Stream stream, BigInteger[] values, int size, Endianness endianness)
+        public static void Write(this Stream stream, IEnumerable<BigInteger> values, int size, Endianness endianness)
         {
             if (stream is null)
             {
@@ -1053,7 +1062,7 @@ namespace ExtensionNet
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">Big integers to write to the stream.</param>
         /// <param name="size">The number of bytes a big integer should take.</param>
-        public static void Write(this Stream stream, BigInteger[] values, int size)
+        public static void Write(this Stream stream, IEnumerable<BigInteger> values, int size)
             => stream.Write(values, size, ByteConverter.Endianness);
 
         /// <summary>
@@ -1079,7 +1088,7 @@ namespace ExtensionNet
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">Signed longs to write to the stream.</param>
         /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
-        public static void Write(this Stream stream, float[] values, Endianness endianness)
+        public static void Write(this Stream stream, IEnumerable<float> values, Endianness endianness)
         {
             if (stream is null)
             {
@@ -1102,7 +1111,7 @@ namespace ExtensionNet
         /// </summary>
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">Signed longs to write to the stream.</param>
-        public static void Write(this Stream stream, float[] values)
+        public static void Write(this Stream stream, IEnumerable<float> values)
             => stream.Write(values, ByteConverter.Endianness);
 
         /// <summary>
@@ -1128,7 +1137,7 @@ namespace ExtensionNet
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">Signed longs to write to the stream.</param>
         /// <param name="endianness">Decides whether to write the value as big endian or little endian.</param>
-        public static void Write(this Stream stream, double[] values, Endianness endianness)
+        public static void Write(this Stream stream, IEnumerable<double> values, Endianness endianness)
         {
             if (stream is null)
             {
@@ -1151,7 +1160,7 @@ namespace ExtensionNet
         /// </summary>
         /// <param name="stream">The stream to write to.</param>
         /// <param name="values">Signed longs to write to the stream.</param>
-        public static void Write(this Stream stream, double[] values)
+        public static void Write(this Stream stream, IEnumerable<double> values)
             => stream.Write(values, ByteConverter.Endianness);
 
         /// <summary>
